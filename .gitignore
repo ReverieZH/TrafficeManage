@@ -1,0 +1,7 @@
+# Project exclude paths
+/traffic_domain/target/
+/traffic_mapper/target/
+/traffic_service/target/
+/traffic_utils/target/
+/traffic_web_admin/target/
+/traffic_web_user/target/
