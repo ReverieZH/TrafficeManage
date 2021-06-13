@@ -1,9 +1,10 @@
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <% String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+			+ path;
 %>
 <!DOCTYPE html>
 <html>
@@ -112,7 +113,7 @@
 	</script>
 </head>
 <body >
-
+<%String rid= String.valueOf(request.getSession().getAttribute("rid"));%>
 <div class="layui-layout layui-layout-admin">
 	<div class="layui-header">
 		<div class="layui-logo">
@@ -125,9 +126,13 @@
 		</div>
 		<!-- 头部区域（可配合layui 已有的水平导航） -->
 		<ul class="layui-nav layui-layout-left">
+			<%  if(rid.equals("1")||rid.equals("2"))  {%>
 			<li class="layui-nav-item "><a href="/manage/main.do">数据管理</a></li>
 			<li class="layui-nav-item layui-this"><a href="">业务管理</a></li>
-			<li class="layui-nav-item"><a href="">nav 3</a></li>
+			<%}else{%>
+			<li class="layui-nav-item"><a href="/manage/service.do">业务管理</a></li>
+			<%}%>
+			<%--<li class="layui-nav-item"><a href="">nav 3</a></li>
 			<li class="layui-nav-item">
 				<a href="javascript:;">nav groups</a>
 				<dl class="layui-nav-child">
@@ -135,20 +140,20 @@
 					<dd><a href="">menu 22</a></dd>
 					<dd><a href="">menu 33</a></dd>
 				</dl>
-			</li>
+			</li>--%>
 		</ul>
 		<ul class="layui-nav layui-layout-right">
 			<li class="layui-nav-item">
 				<a href="javascript:;">
 					<img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
-					tester
+					<%=SecurityContextHolder.getContext().getAuthentication().getName()%>
 				</a>
 				<dl class="layui-nav-child">
 					<dd><a href="">set 1</a></dd>
 					<dd><a href="">set 2</a></dd>
 				</dl>
 			</li>
-			<li class="layui-nav-item"><a href="">Sign out</a></li>
+			<li class="layui-nav-item"><a href="">登出</a></li>
 		</ul>
 	</div>
 	<div class="layui-side layui-bg-black">

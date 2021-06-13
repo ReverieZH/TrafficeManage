@@ -17,14 +17,12 @@ public interface SyslogService {
      * 查询所有日志信息
      * @return
      */
-    public List<Syslog> findAll(int page, int size);
+    public List<Syslog> selectAll();
 
     /**
      * 根据工号查询日志信息
      * @param jobNumber
-     * @param page
-     * @param size
      * @return
      */
-    public List<Syslog> findByJobNumber(String jobNumber, Integer page, Integer size);
+    public List<Syslog> findByJobNumber(String jobNumber);
 }

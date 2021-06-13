@@ -11,6 +11,7 @@ public class Applyednumber {
   private String platenumber;
   private String locationName;
   private String applyNumber;
+
   public String getApplyednumberid() {
     return applyednumberid;
   }

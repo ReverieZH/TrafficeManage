@@ -4,7 +4,7 @@
 <% String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+			+ path ;
 %>
 <!DOCTYPE html>
 <html>
@@ -161,24 +161,21 @@
 							<td width="10%" height="50" align="left"><input id="password" name="password" type="password" value="<%=user.getPassword()%>"></td>
 						</tr>
 						<tr>
-							<td width="10%" height="50" align="right">驾驶证类型:<span style="color: red;">*</span></td>
+							<td width="10%" height="50" align="right">证件类型:<span style="color: red;">*</span></td>
 							<td width="10%" height="50" align="left"><select name="certificatetype" id="certificatetypeop" style="height: 25px ;width: 200px"  >
-								<option selected disabled hidden value="<%=user.getCertificatetype()%>"><%=StringUtil.getvehicleTypeStr(user.getCertificatetype())%></option>
-								<option value="C1" >小型汽车C1</option>
-								<option value="C2" >小型自动挡汽车C2</option>
-								<option value="C3" >低速载货汽车C3</option>
-								<option value="C4" >三轮汽车C4</option>
-								<option value="B1" >中型客车B1</option>
-								<option value="B2" >大型货车B2</option>
-								<option value="A1" >大型客车A1</option>
-								<option value="A3" >城市公交车A3</option>
-								<option value="D" >普通三轮摩托车D</option>
-								<option value="E" >普通二轮摩托车E</option>
-								<option value="F" >轻便摩托车F</option>
+								<option selected disabled hidden value="<%=user.getCertificatetype()%>"><%=StringUtil.getCertificateType(user.getCertificatetype())%></option>
+								<option value="A" >A居民身份证</option>
+								<option value="C2" >C军官证</option>
+								<option value="D" >D士兵证</option>
+								<option value="E" >E军官离退休证</option>
+								<option value="F" >F境外人员身份证明</option>
+								<option value="G" >G外交人员身份证明</option>
+								<option value="I" >I外国人永久居留身份证</option>
+								<option value="Q" >Q港澳台居民居住证</option>
 							</select></td>
 						</tr>
 						<tr>
-							<td width="10%" height="50" align="right">驾驶证号码:<span style="color: red;">*</span></td>
+							<td width="10%" height="50" align="right">证件号码:<span style="color: red;">*</span></td>
 							<td width="10%" height="50" align="left"><input id="certificatenumber" name="certificatenumber" type="text" value="<%=user.getCertificatenumber()%>"></td>
 						</tr>
 						<tr>

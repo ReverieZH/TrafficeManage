@@ -56,23 +56,23 @@ public class driveLicenceController {
     @ResponseBody
     public String delete(HttpServletRequest request, HttpServletResponse response, @RequestParam("plateNumber")List<String> palteNumberList){
         boolean issuccess=false;
-        int total=plateNumberService.deleteList(palteNumberList);
+        int total=driveLicenceService.deleteList(palteNumberList);
         if(total>0){
             issuccess=true;
         }
         return String.valueOf(issuccess);
     }*/
 
-  /*  @RequestMapping("/delete.do")
+    @RequestMapping("/delete.do")
     @ResponseBody
-    public String delete(HttpServletRequest request, HttpServletResponse response, @RequestParam("plateNumber")String palteNumber){
+    public String delete(HttpServletRequest request, HttpServletResponse response, @RequestParam("dlnumber")String dlnumber){
         boolean issuccess=false;
-        int total=plateNumberService.delete(palteNumber);
+        int total=driveLicenceService.delete(dlnumber);
         if(total>0){
             issuccess=true;
         }
         return String.valueOf(issuccess);
-    }*/
+    }
 
     @RequestMapping("/getaddDriveLicence.do")
     public String getaddDriveLicence(HttpServletRequest request){

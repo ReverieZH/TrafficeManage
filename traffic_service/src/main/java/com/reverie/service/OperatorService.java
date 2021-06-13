@@ -10,7 +10,7 @@ public interface OperatorService {
 
     public Operator selectByKey(String jobnumber);
 
-    public List<Operator> selectAll();
+    public List<Operator> selectAll(int page,int size);
 
 
     public int delete(String jobnumber);

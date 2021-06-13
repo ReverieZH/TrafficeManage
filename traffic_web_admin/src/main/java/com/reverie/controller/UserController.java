@@ -5,6 +5,7 @@ import com.reverie.domain.Platenumber;
 import com.reverie.domain.User;
 import com.reverie.service.UserService;
 import com.reverie.utils.DateUtil;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller      //@ResponseBody+@Controller
@@ -49,6 +51,24 @@ public class UserController {
         return layUI;
     }
 
+    @RequestMapping("/serachByUsername.do")
+    @ResponseBody
+    public LayUI serachByUsername(HttpServletRequest request, @RequestParam String username){
+        LayUI<User> layUI=new LayUI();
+        List<User> users = userService.findUsernameLike(username);
+        if(users!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(users.size());
+            layUI.setData(users);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
     @RequestMapping("changeStatus.do")
     @ResponseBody
     public String changeStatus(@RequestParam("username")String username,@RequestParam("status")String status){

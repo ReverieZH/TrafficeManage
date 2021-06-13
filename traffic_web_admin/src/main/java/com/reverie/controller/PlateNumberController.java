@@ -50,7 +50,24 @@ public class PlateNumberController {
         return layUI;
     }
 
-
+    @RequestMapping("/serachNumber.do")
+    @ResponseBody
+    public LayUI searchPlateNumberLike(HttpServletRequest request, @RequestParam() String plateNumber){
+        LayUI<Platenumber> layUI=new LayUI();
+        List<Platenumber> platenumbers = plateNumberService.findPlateNumberLike(plateNumber);
+        if(platenumbers!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(platenumbers.size());
+            layUI.setData(platenumbers);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
 
     @RequestMapping("/add.do")
     @ResponseBody
@@ -92,6 +109,7 @@ public class PlateNumberController {
         boolean issuccess =false;
         System.out.println("=============="+platenumber);
         platenumber.setIssueDate(DateUtil.getSqlDateByFormatString("yyyy-MM-dd", DateUtil.getCurrentTime()));
+        platenumber.setLocationName(platenumber.getProvince()+platenumber.getCity());
         issuccess=plateNumberService.save(platenumber)>0?true:false;
         return String.valueOf(issuccess);
     }

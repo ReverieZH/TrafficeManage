@@ -26,6 +26,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findUsernameLike(String usernameStr) {
+        String username="%"+usernameStr+"%";
+        return userMapper.findUsernameLike(username);
+    }
+
+    @Override
     public int delete(String username) {
         return userMapper.deleteByPrimaryKey(username);
     }

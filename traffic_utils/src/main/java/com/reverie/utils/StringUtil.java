@@ -61,4 +61,23 @@ public class StringUtil {
         }
         return "";
     }
+
+    /**
+     * @Description: 获取窗口办理字符串
+     * @Date:
+     * @Author:
+     */
+    public static String getCertificateType(String certificatetype){
+        switch (certificatetype){
+            case "A": return "A居民身份证";
+            case "C": return "C军官证";
+            case "D": return "D士兵证";
+            case "E": return "E军官离退休证";
+            case "F": return "F境外人员身份证明";
+            case "G": return "G外交人员身份证明";
+            case "I": return "I外国人永久居留身份证";
+            case "Q": return "Q港澳台居民居住证";
+        }
+        return "";
+    }
 }

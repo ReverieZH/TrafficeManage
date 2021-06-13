@@ -16,19 +16,19 @@ public interface SyslogMapper extends Mapper<Syslog> {
      * 新增一条日志信息
      * @param syslog
      */
-    @Insert("insert into tb_syslog(visit_time,job_number,ip,url,execution_time,method) values " +
-            "(#{visitTime},#{jobNumber},#{ip},#{url},#{executionTime},#{method})")
+    @Insert("insert into syslog(visit_time,jobnumber,ip,url,execution_time,method) values " +
+            "(#{visitTime},#{jobnumber},#{ip},#{url},#{executionTime},#{method})")
     public void save(Syslog syslog);
 
     /**
      * 查询所有日志信息
      * @return
      */
-    @Select("select * from tb_syslog")
+    @Select("select * from syslog")
     @Results({
             @Result(column = "id",property = "id",id = true),
             @Result(column = "visit_time",property = "visitTime"),
-            @Result(column = "job_number",property = "jobNumber"),
+            @Result(column = "jobnumber",property = "jobnumber"),
             @Result(column = "ip",property = "ip"),
             @Result(column = "url",property = "url"),
             @Result(column = "execution_time",property = "executionTime"),
@@ -36,15 +36,15 @@ public interface SyslogMapper extends Mapper<Syslog> {
     })
     public List<Syslog> findAll();
 
-    @Select("select * from tb_syslog where job_number like #{jobNumberStr}")
+    @Select("select * from syslog where jobnumber=#{jobnumber}")
     @Results({
             @Result(column = "id",property = "id",id = true),
             @Result(column = "visit_time",property = "visitTime"),
-            @Result(column = "job_number",property = "jobNumber"),
+            @Result(column = "jobnumber",property = "jobnumber"),
             @Result(column = "ip",property = "ip"),
             @Result(column = "url",property = "url"),
             @Result(column = "execution_time",property = "executionTime"),
             @Result(column = "method",property = "method"),
     })
-    public List<Syslog> findByJobNumber(String jobNumberStr);
+    public List<Syslog> findByJobNumber(String jobnumber);
 }

@@ -5,7 +5,7 @@
 <% String path = request.getContextPath();
     String basePath = request.getScheme() + "://"
             + request.getServerName() + ":" + request.getServerPort()
-            + path + "/";
+            + path ;
 %>
 <!DOCTYPE html>
 <html>
@@ -265,6 +265,81 @@
                 }
             }
         }
+
+        function search() {
+            var searchById=document.getElementById("searchById").value;
+            layui.use("table",function () {
+                    var table = layui.table;
+
+                    table.render({
+                        elem: "#plateNumber_table",                 //容器id
+                        url:"/user/serachByUsername.do?username="+searchById,  //数据接口
+                        cols:[[
+                            {field:'num',type:"numbers"},
+                            {field:'check',type:"checkbox"},
+                            {field:'username',title:'用户名',sort:true,width:120},
+                            {field:'password',title:'密码',width:100},
+                            {field:'certificatetype',title:'证件类型',width:100,templet:function(d){
+                                    if(d.certificatetype=='A')
+                                        return "A居民身份证";
+                                    else if(d.certificatetype=='C')
+                                        return "C军官证";
+                                    else if(d.certificatetype=='D')
+                                        return "D士兵证";
+                                    else if(d.certificatetype=='E')
+                                        return "E军官离退休证";
+                                    else if(d.certificatetype=='F')
+                                        return "F境外人员身份证明";
+                                    else if(d.certificatetype=='G')
+                                        return "G外交人员身份证明";
+                                    else if(d.certificatetype=='I')
+                                        return "I外国人永久居留身份证";
+                                    else if(d.certificatetype=='Q')
+                                        return "Q港澳台居民居住证";
+                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                            {field:'certificatenumber',title:'证件号码',width:100},
+                            {field:'phonenumber',title:'电话号码',width:100},
+                            {field:'type',title:'用户类型',sort:true,width:120,templet:function(d){
+                                    if(d.type=='0')
+                                        return "普通用户";
+                                    else if(d.type=='1')
+                                        return "驾驶人用户";
+                                }},
+                            {field:'valid',title:'状态',sort:true,width:100,templet:function(d){
+                                    if(d.valid=='1')
+                                        return "正常使用";
+                                    else if(d.valid=='0')
+                                        return "<span  style='color:red'>限制使用</span>";
+                                    else if(d.valid=='2')
+                                        return "<span  style='color:green'>申请中</span>";
+                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                            {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
+                        ]],
+                        page: true,    //开启分页
+                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                        limit: 10,  //一页显示10条数据
+                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                            var result;
+                            console.log(this);
+                            console.log(JSON.stringify(res));
+                            if (this.page.curr) {
+                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                            } else {
+                                result = res.data.slice(0, this.limit);
+                            }
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.count, //解析数据长度
+                                "data": result //解析数据列表
+                            };
+                        },
+                        //设置表格工具栏
+                        toolbar: "#toolbar"
+                    });
+                }
+            )
+        }
     </script>
 
 </head>
@@ -274,9 +349,13 @@
     <table id="plateNumber_table"  lay-filter="headtoolbar"></table>
 
     <script type="text/html" id="toolbar">
-        <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
-<%--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--%>
+        <div>
+            <div class="layui-btn-container" style="float: left">
+                <button class="layui-btn layui-btn-sm" lay-event="findAll">全部</button>
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchById" name="searchById" placeholder="输入用户名查找"  class="layui-input" onchange="search()" style="width: 150px;height: 30px" >
+            </div>
         </div>
     </script>
 
@@ -298,9 +377,32 @@
                         {field:'check',type:"checkbox"},
                         {field:'username',title:'用户名',sort:true,width:120},
                         {field:'password',title:'密码',width:100},
-                        {field:'certificatetype',title:'驾驶证类型',width:100},
-                        {field:'certificatenumber',title:'驾驶证号码',width:100},
+                        {field:'certificatetype',title:'证件类型',width:100,templet:function(d){
+                                if(d.certificatetype=='A')
+                                    return "A居民身份证";
+                                else if(d.certificatetype=='C')
+                                    return "C军官证";
+                                else if(d.certificatetype=='D')
+                                    return "D士兵证";
+                                else if(d.certificatetype=='E')
+                                    return "E军官离退休证";
+                                else if(d.certificatetype=='F')
+                                    return "F境外人员身份证明";
+                                else if(d.certificatetype=='G')
+                                    return "G外交人员身份证明";
+                                else if(d.certificatetype=='I')
+                                    return "I外国人永久居留身份证";
+                                else if(d.certificatetype=='Q')
+                                    return "Q港澳台居民居住证";
+                                /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                        {field:'certificatenumber',title:'证件号码',width:100},
                         {field:'phonenumber',title:'电话号码',width:100},
+                        {field:'type',title:'用户类型',sort:true,width:120,templet:function(d){
+                                if(d.type=='0')
+                                    return "普通用户";
+                                else if(d.type=='1')
+                                    return "驾驶人用户";
+                        }},
                         {field:'valid',title:'状态',sort:true,width:100,templet:function(d){
                                 if(d.valid=='1')
                                     return "正常使用";
@@ -312,6 +414,25 @@
                         {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
                     ]],
                     page:true,    //开启分页
+                    limits: [3,5,10],  //一页选择显示3,5或10条数据
+                    limit: 10,  //一页显示10条数据
+                    parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                        var result;
+                        console.log(this);
+                        console.log(JSON.stringify(res));
+                        if(this.page.curr){
+                            result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
+                        }
+                        else{
+                            result=res.data.slice(0,this.limit);
+                        }
+                        return {
+                            "code": res.code, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                            "count": res.count, //解析数据长度
+                            "data": result //解析数据列表
+                        };
+                    },
                     //设置表格工具栏
                     toolbar:"#toolbar"
                 });
@@ -323,8 +444,96 @@
                         var checkStatus=table.checkStatus(obj.config.id);
                         var eventName=obj.event;
                         switch (eventName) {
-                            case "add":
-                                  getiframe('/user/getaddUser.do');
+                            case "findAll":
+                                layui.use("table",function () {
+                                    var table = layui.table;
+
+                                    table.render({
+                                        elem: "#plateNumber_table",                 //容器id
+                                        url: "/user/datamain.do",  //数据接口
+                                        cols: [[
+                                            {field: 'num', type: "numbers"},
+                                            {field: 'check', type: "checkbox"},
+                                            {field: 'username', title: '用户名', sort: true, width: 120},
+                                            {field: 'password', title: '密码', width: 100},
+                                            {
+                                                field: 'certificatetype',
+                                                title: '证件类型',
+                                                width: 100,
+                                                templet: function (d) {
+                                                    if (d.certificatetype == 'A')
+                                                        return "A居民身份证";
+                                                    else if (d.certificatetype == 'C')
+                                                        return "C军官证";
+                                                    else if (d.certificatetype == 'D')
+                                                        return "D士兵证";
+                                                    else if (d.certificatetype == 'E')
+                                                        return "E军官离退休证";
+                                                    else if (d.certificatetype == 'F')
+                                                        return "F境外人员身份证明";
+                                                    else if (d.certificatetype == 'G')
+                                                        return "G外交人员身份证明";
+                                                    else if (d.certificatetype == 'I')
+                                                        return "I外国人永久居留身份证";
+                                                    else if (d.certificatetype == 'Q')
+                                                        return "Q港澳台居民居住证";
+                                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/
+                                                }
+                                            },
+                                            {field: 'certificatenumber', title: '证件号码', width: 100},
+                                            {field: 'phonenumber', title: '电话号码', width: 100},
+                                            {
+                                                field: 'type',
+                                                title: '用户类型',
+                                                sort: true,
+                                                width: 120,
+                                                templet: function (d) {
+                                                    if (d.type == '0')
+                                                        return "普通用户";
+                                                    else if (d.type == '1')
+                                                        return "驾驶人用户";
+                                                }
+                                            },
+                                            {
+                                                field: 'valid',
+                                                title: '状态',
+                                                sort: true,
+                                                width: 100,
+                                                templet: function (d) {
+                                                    if (d.valid == '1')
+                                                        return "正常使用";
+                                                    else if (d.valid == '0')
+                                                        return "<span  style='color:red'>限制使用</span>";
+                                                    else if (d.valid == '2')
+                                                        return "<span  style='color:green'>申请中</span>";
+                                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/
+                                                }
+                                            },
+                                            {field: "操作", toolbar: "#bar", fixed: "right", width: 300}           //设置表头工具栏
+                                        ]],
+                                        page: true,    //开启分页
+                                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                                        limit: 10,  //一页显示10条数据
+                                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                                            var result;
+                                            console.log(this);
+                                            console.log(JSON.stringify(res));
+                                            if (this.page.curr) {
+                                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                                            } else {
+                                                result = res.data.slice(0, this.limit);
+                                            }
+                                            return {
+                                                "code": res.code, //解析接口状态
+                                                "msg": res.msg, //解析提示文本
+                                                "count": res.count, //解析数据长度
+                                                "data": result //解析数据列表
+                                            };
+                                        },
+                                        //设置表格工具栏
+                                        toolbar: "#toolbar"
+                                    });
+                                })
                                   break;
                             case "delete":
                                     var arr=checkStatus.data;

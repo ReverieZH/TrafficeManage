@@ -29,6 +29,13 @@ public class ApplyExemptedCheckServiceImpl implements ApplyExemptedCheckService 
     }
 
     @Override
+    public List<Applyexemptedcheck> selectCondiion(String status) {
+        Applyexemptedcheck applyexemptedcheck=new Applyexemptedcheck();
+        applyexemptedcheck.setStatus(status);
+        return applyExemptedCheckMapper.select(applyexemptedcheck);
+    }
+
+    @Override
     public List<Applyexemptedcheck> selectByUser(String username) {
         Applyexemptedcheck applyExemptedCheck=new Applyexemptedcheck();
         applyExemptedCheck.setUsername(username);

@@ -21,6 +21,7 @@ public class Car {
   private String engineNumber;         //引擎号码
   private String status;              //状态
   private String registrant;          //登记人
+  private String certificateNumber;          //登记人
   private java.util.Date registationDate;   //登记日期
 
 
@@ -118,6 +119,15 @@ public class Car {
 
   public void setRegistationDate(java.util.Date registationDate) {
     this.registationDate = registationDate;
+  }
+
+
+  public String getCertificateNumber() {
+    return certificateNumber;
+  }
+
+  public void setCertificateNumber(String certificateNumber) {
+    this.certificateNumber = certificateNumber;
   }
 
   @Override

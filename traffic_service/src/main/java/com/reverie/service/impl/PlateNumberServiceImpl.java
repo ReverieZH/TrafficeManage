@@ -1,6 +1,7 @@
 package com.reverie.service.impl;
 
 import com.reverie.domain.Platenumber;
+import com.reverie.domain.User;
 import com.reverie.mapper.PlatenumberMapper;
 import com.reverie.service.PlateNumberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class PlateNumberServiceImpl implements PlateNumberService {
     @Override
     public List<Platenumber> selectAll() {
         return platenumberMapper.selectAll();
+    }
+
+    @Override
+    public List<Platenumber> findPlateNumberLike(String platenumberStr) {
+        String plateNumber="%"+platenumberStr+"%";
+        return platenumberMapper.findPlateNumberLike(plateNumber);
     }
 
     @Override

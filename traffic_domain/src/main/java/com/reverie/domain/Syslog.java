@@ -16,7 +16,7 @@ public class Syslog implements Serializable {
     private Date visitTime;         //访问时间
     @Transient
     private String visitTimeStr;    //访问时间字符串
-    private String jobNumber;       //用户id；外键
+    private String jobnumber;       //用户id；外键
     private String ip;              //访问者ip
     private String url;             //访问的资源路径
     private Long executionTime;    //访问耗时
@@ -38,12 +38,12 @@ public class Syslog implements Serializable {
         this.visitTime = visitTime;
     }
 
-    public String getJobNumber() {
-        return jobNumber;
+    public String getJobnumber() {
+        return jobnumber;
     }
 
-    public void setJobNumber(String jobNumber) {
-        this.jobNumber = jobNumber;
+    public void setJobnumber(String jobnumber) {
+        this.jobnumber = jobnumber;
     }
 
     public String getIp() {
@@ -95,7 +95,7 @@ public class Syslog implements Serializable {
                 "id=" + id +
                 ", visitTime=" + visitTime +
                 ", visitTimeStr='" + visitTimeStr + '\'' +
-                ", jobNumber='" + jobNumber + '\'' +
+                ", jobnumber='" + jobnumber + '\'' +
                 ", ip='" + ip + '\'' +
                 ", url='" + url + '\'' +
                 ", executionTime=" + executionTime +

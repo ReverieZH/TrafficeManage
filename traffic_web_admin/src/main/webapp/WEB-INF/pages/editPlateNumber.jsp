@@ -9,7 +9,7 @@
 <% String path = request.getContextPath();
     String basePath = request.getScheme() + "://"
             + request.getServerName() + ":" + request.getServerPort()
-            + path + "/";
+            + path;
 %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -135,8 +135,16 @@
     <table class="table_context" width="100%">
         <input id="plateNumber" name="plateNumber"  value="<%=platenumber.getPlateNumber()%>" type="hidden">
         <tr>
+            <td width="10%" height="50" align="right">省份:<span style="color: red;">*</span></td>
+            <td width="10%" height="50" align="left"><input id="province" name="province" type="text" value="<%=platenumber.getProvince()%>"></td>
+        </tr>
+        <tr>
+            <td width="10%" height="50" align="right">城市:<span style="color: red;">*</span></td>
+            <td width="10%" height="50" align="left"><input id="city" name="city" type="text" value="<%=platenumber.getCity()%>"></td>
+        </tr>
+        <tr>
             <td width="10%" height="50" align="right">所在地:<span style="color: red;">*</span></td>
-            <td width="10%" height="50" align="left"><input id="location" name="location" type="text" value="<%=platenumber.getLocation()%>"></td>
+            <td width="10%" height="50" align="left"><input id="location" name="location" type="text" value="<%=platenumber.getLocationName()%>"></td>
         </tr>
         <tr>
             <td width="10%" height="50" align="right">使用状态:</td>

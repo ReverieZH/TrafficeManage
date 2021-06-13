@@ -4,6 +4,7 @@ package com.reverie.controller;
 import com.reverie.domain.Car;
 import com.reverie.domain.Uservehcile;
 import com.reverie.service.UserVehcileService;
+import com.reverie.service.VehicleBindingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,12 +23,16 @@ public class VehicleController {
     @Autowired
     private UserVehcileService userVehcileService;
 
+    @Autowired
+    private VehicleBindingService vehicleBindingService;
+
     @RequestMapping("/bind")
     @ResponseBody
     public  Map<String,Object> bind(String plateNumber,String username){
         Map<String,Object> map=new HashMap<>();
         try {
-            userVehcileService.bind(username,plateNumber);
+//            userVehcileService.bind(username,plateNumber);
+            vehicleBindingService.bind(username,plateNumber);
             map.put("issuccess",true);
             map.put("message","成功");
             return map;
@@ -42,7 +47,8 @@ public class VehicleController {
     @ResponseBody
     public Map<String,Object> userVehicle(String username){
         Map<String,Object> map=new HashMap<>();
-        List<Car> cars = userVehcileService.selectCarByUser(username);
+//        List<Car> cars = userVehcileService.selectCarByUser(username);
+        List<Car> cars = vehicleBindingService.selectCarByUser(username);
         if(cars!=null){
             map.put("issuccess",true);
             map.put("cars",cars);

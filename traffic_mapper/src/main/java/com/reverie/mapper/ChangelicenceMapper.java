@@ -1,4 +1,10 @@
 package com.reverie.mapper;
 
-public interface ChangelicenceMapper {
+import com.reverie.domain.Changelicence;
+import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.common.Mapper;
+
+@org.apache.ibatis.annotations.Mapper
+@Repository
+public interface ChangelicenceMapper extends Mapper<Changelicence> {
 }

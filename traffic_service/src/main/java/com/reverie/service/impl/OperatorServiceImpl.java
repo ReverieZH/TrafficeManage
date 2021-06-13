@@ -1,5 +1,6 @@
 package com.reverie.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.reverie.domain.Operator;
 import com.reverie.mapper.OperatorMapper;
 import com.reverie.service.OperatorService;
@@ -27,7 +28,8 @@ public class OperatorServiceImpl implements OperatorService {
 
 
     @Override
-    public List<Operator> selectAll() {
+    public List<Operator> selectAll(int page,int size) {
+//        PageHelper.startPage(page,size);
         return operatorMapper.selectAll();
     }
 

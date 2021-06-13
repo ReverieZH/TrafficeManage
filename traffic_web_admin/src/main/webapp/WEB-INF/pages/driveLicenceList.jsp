@@ -5,7 +5,7 @@
 <% String path = request.getContextPath();
     String basePath = request.getScheme() + "://"
             + request.getServerName() + ":" + request.getServerPort()
-            + path + "/";
+            + path ;
 %>
 <!DOCTYPE html>
 <html>
@@ -304,11 +304,9 @@
                         {field:'birth',title:'出生日期',width:100},
                         {field:'firstDate',title:'初次领证日期',width:100},
                         {field:'vehicleType',title:'准驾车型',width:100},
-                        {field:'firstDate',title:'初次领证日期',width:100},
                         {field:'startDate',title:'有效期开始日期',width:100},
                         {field:'endDate',title:'有效期结束日期',width:100},
-                        {field:'authority',title:'有效期结束日期',width:100},
-                        {field:'firstDate',title:'发证机关',width:100},
+                        {field:'authority',title:'发证机关',width:100},
                         {field:'score',title:'记分',width:100},
                         {field:'username',title:'用户名',width:100},
                         {field:'status',title:'状态',sort:true,width:100,templet:function(d){
@@ -322,6 +320,25 @@
                         {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
                     ]],
                     page:true,    //开启分页
+                    limits: [3,5,10],  //一页选择显示3,5或10条数据
+                    limit: 10,  //一页显示10条数据
+                    parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                        var result;
+                        console.log(this);
+                        console.log(JSON.stringify(res));
+                        if(this.page.curr){
+                            result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
+                        }
+                        else{
+                            result=res.data.slice(0,this.limit);
+                        }
+                        return {
+                            "code": res.code, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                            "count": res.count, //解析数据长度
+                            "data": result //解析数据列表
+                        };
+                    },
                     //设置表格工具栏
                     toolbar:"#toolbar"
                 });
@@ -365,7 +382,7 @@
                                    break;
                         case "del":
                                   layer.confirm("您确认要删除吗?",function (index) {
-                                        deletajax(tr.plateNumber,obj);
+                                        deletajax(tr.dlnumber,obj);
                                         layer.close(index);
                                   });
                                    break;

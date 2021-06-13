@@ -10,6 +10,8 @@ public interface UserService {
 
     public List<User> selectAll();
 
+    public List<User> findUsernameLike(String usernameStr);
+
     public int delete(String username);
 
     public int deleteList(List<String> usernames);

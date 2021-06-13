@@ -1379,3 +1379,7 @@ Caused by: java.net.UnknownHostException: localhost\
 2021-05-23 17:59:35,866 3392   [       Thread-3] INFO  aba.druid.pool.DruidDataSource  - {dataSource-1} closed
 2021-05-24 16:17:34,706 0      [           main] INFO  aba.druid.pool.DruidDataSource  - {dataSource-1} inited
 2021-05-24 16:17:37,996 3290   [       Thread-3] INFO  aba.druid.pool.DruidDataSource  - {dataSource-1} closed
+2021-06-10 09:58:34,153 0      [           main] INFO  aba.druid.pool.DruidDataSource  - {dataSource-1} inited
+2021-06-10 09:58:38,547 4394   [       Thread-3] INFO  aba.druid.pool.DruidDataSource  - {dataSource-1} closed
+2021-06-10 09:59:43,708 0      [           main] INFO  aba.druid.pool.DruidDataSource  - {dataSource-1} inited
+2021-06-10 09:59:47,297 3589   [       Thread-3] INFO  aba.druid.pool.DruidDataSource  - {dataSource-1} closed

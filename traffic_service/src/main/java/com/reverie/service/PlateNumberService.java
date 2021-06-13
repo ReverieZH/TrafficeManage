@@ -1,6 +1,7 @@
 package com.reverie.service;
 
 import com.reverie.domain.Platenumber;
+import com.reverie.domain.User;
 
 import java.util.List;
 
@@ -8,6 +9,8 @@ public interface PlateNumberService {
     public Platenumber selectByKey(String plateNumber);
 
     public List<Platenumber> selectAll();
+
+    public List<Platenumber> findPlateNumberLike(String platenumberStr);
 
     public List<Platenumber> selectUsableNumber(String province,String city);
 

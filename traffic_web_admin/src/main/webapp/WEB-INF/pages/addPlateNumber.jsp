@@ -2,7 +2,7 @@
 <% String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+			+ path ;
 %>
 <!DOCTYPE html>
 <html>
@@ -138,14 +138,26 @@
 	                    	<td width="10%" height="50" align="right">车牌号:<span style="color: red;">*</span></td>
 	                        <td width="10%" height="50" align="left"><input id="plateNumber" name="plateNumber" type="text"></td>
 	                    </tr>
+				<form action="#" method="post" >
 						<tr>
 							<td width="10%" height="50" align="right">省份:<span style="color: red;">*</span></td>
-							<td width="10%" height="50" align="left"><input id="province" name="province" type="text"></td>
+							<td width="10%" height="50" align="left">
+								<select name="province" id="province" lay-verify="required" lay-search lay-filter="province">
+									<option value="">省份</option>
+								</select>
+<%--								<input id="province" name="province" type="text">--%>
+							</td>
 						</tr>
 						<tr>
 							<td width="10%" height="50" align="right">城市:<span style="color: red;">*</span></td>
-							<td width="10%" height="50" align="left"><input id="location" name="location" type="text"></td>
+							<td width="10%" height="50" align="left">
+<%--								<input id="location" name="location" type="text">--%>
+								<select name="city" id="city" lay-verify="required" lay-search lay-filter="city">
+									<option value="">地级市</option>
+								</select>
+							</td>
 						</tr>
+				</form>
 						<tr>
 							<td width="10%" height="50" align="right">号牌头:<span style="color: red;">*</span></td>
 							<td width="10%" height="50" align="left"><input id="plateHead" name="plateHead" type="text"></td>

@@ -5,7 +5,7 @@
 <% String path = request.getContextPath();
     String basePath = request.getScheme() + "://"
             + request.getServerName() + ":" + request.getServerPort()
-            + path + "/";
+            + path;
 %>
 <!DOCTYPE html>
 <html>
@@ -265,6 +265,83 @@
                 }
             }
         }
+
+        function datamain() {
+
+            layui.use("table",function () {
+                var table = layui.table;
+
+                table.render({
+                    elem:"#plateNumber_table",                 //容器id
+                    url:"/exemptCheck/data.do",  //数据接口
+                    cols:[[
+                        {field:'num',type:"numbers"},
+                        {field:'check',type:"checkbox"},
+                        {field:'acNumber',title:'申请编号',sort:true,width:120},
+                        {field:'plateNumber',title:'车牌号',sort:true,width:120},
+                        {field:'insurancePhoto',title:'强险照片',width:100, templet: function (d) {
+                                return "<img  src=\""+d.insurancePhoto+"\" >强险照片</img>";
+                            }},
+                        {field:'taxPhoto',title:'车船税照片',width:100, templet: function (d) {
+                                return "<img  src=\""+d.taxPhoto+"\" >车船税照片</img>";
+                            }},
+                        {field:'endDate',title:'结束日期',width:100},
+                        {
+                            field: 'isNeedPaper', title: '是否需要纸质凭证', sort: true, width: 100, templet: function (d) {
+                                if (d.isNeedPaper == '0')
+                                    return "不需要";
+                                else if (d.isNeedPaper == '1')
+                                    return "<span  style='color:green'>需要</span>";
+                            }
+                        },{field:'accessMethod',title:'获取方式',sort:true,width:100,templet:function(d){
+                                if(d.accessMethod=='0')
+                                    return "<span  style='color:green'>委托邮政寄递</span>";
+                                else if(d.accessMethod=='1')
+                                    return "前往窗口自取";
+                            }},
+                        {field:'address',title:'住址',width:100},
+                        {field:'area',title:'地区',width:100},
+                        {field:'receiverName',title:'收件人姓名',width:100},
+                        {field:'phoneNumber',title:'手机号码',width:100},
+                        {field:'postCode',title:'邮政编码',width:100},
+                        {field:'username',title:'用户名',width:100},
+                        {field:'applyDate',title:'申请日期',width:100},
+                        {field:'status',title:'状态',sort:true,width:100,templet:function(d){
+                                if(d.status=='1')
+                                    return "受理完成";
+                                else if(d.status=='0')
+                                    return "<span  style='color:red'>不予受理</span>";
+                                else if(d.status=='2')
+                                    return "<span  style='color:green'>申请中</span>";
+                                /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                        {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
+                    ]],
+                    page:true,    //开启分页
+                    limits: [3,5,10],  //一页选择显示3,5或10条数据
+                    limit: 10,  //一页显示10条数据
+                    parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                        var result;
+                        console.log(this);
+                        console.log(JSON.stringify(res));
+                        if(this.page.curr){
+                            result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
+                        }
+                        else{
+                            result=res.data.slice(0,this.limit);
+                        }
+                        return {
+                            "code": res.code, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                            "count": res.count, //解析数据长度
+                            "data": result //解析数据列表
+                        };
+                    },
+                    //设置表格工具栏
+                    toolbar:"#toolbar"
+                });
+
+            })
+        }
     </script>
 
 </head>
@@ -275,7 +352,10 @@
 
     <script type="text/html" id="toolbar">
         <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+            <button class="layui-btn layui-btn-sm" lay-event="datamain">所有数据</button>
+            <%--            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>--%>
+            <%--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--%>
+            <button class="layui-btn layui-btn-sm" lay-event="selectApply">申请中</button>
 <%--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--%>
         </div>
     </script>
@@ -346,6 +426,25 @@
                         {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
                     ]],
                     page:true,    //开启分页
+                    limits: [3,5,10],  //一页选择显示3,5或10条数据
+                    limit: 10,  //一页显示10条数据
+                    parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                        var result;
+                        console.log(this);
+                        console.log(JSON.stringify(res));
+                        if(this.page.curr){
+                            result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
+                        }
+                        else{
+                            result=res.data.slice(0,this.limit);
+                        }
+                        return {
+                            "code": res.code, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                            "count": res.count, //解析数据长度
+                            "data": result //解析数据列表
+                        };
+                    },
                     //设置表格工具栏
                     toolbar:"#toolbar"
                 });
@@ -357,18 +456,82 @@
                         var checkStatus=table.checkStatus(obj.config.id);
                         var eventName=obj.event;
                         switch (eventName) {
-                            case "add":
-                                  getiframe('/vehiclelicense/getaddVehiclelicense.do');
+                            case "datamain":
+                                  datamain();
                                   break;
-                            case "delete":
-                                    var arr=checkStatus.data;
-                                    var url="";
-                                    for(j=0;j<arr.length;j++){
-                                        url+="plateNumber="+arr[j].plateNumber+"&";
-                                    }
-                                   url=url.substring(0,url.length-1);
+                            case "selectApply":
+                                layui.use("table",function () {
+                                    var table = layui.table;
 
-                                   deleteajaxRequest(url);
+                                    table.render({
+                                        elem:"#plateNumber_table",                 //容器id
+                                        url:"/exemptCheck/selectdatamain.do?status=2",  //数据接口
+                                        cols:[[
+                                            {field:'num',type:"numbers"},
+                                            {field:'check',type:"checkbox"},
+                                            {field:'acNumber',title:'申请编号',sort:true,width:120},
+                                            {field:'plateNumber',title:'车牌号',sort:true,width:120},
+                                            {field:'insurancePhoto',title:'强险照片',width:100, templet: function (d) {
+                                                    return "<img  src=\""+d.insurancePhoto+"\" >强险照片</img>";
+                                                }},
+                                            {field:'taxPhoto',title:'车船税照片',width:100, templet: function (d) {
+                                                    return "<img  src=\""+d.taxPhoto+"\" >车船税照片</img>";
+                                                }},
+                                            {field:'endDate',title:'结束日期',width:100},
+                                            {
+                                                field: 'isNeedPaper', title: '是否需要纸质凭证', sort: true, width: 100, templet: function (d) {
+                                                    if (d.isNeedPaper == '0')
+                                                        return "不需要";
+                                                    else if (d.isNeedPaper == '1')
+                                                        return "<span  style='color:green'>需要</span>";
+                                                }
+                                            },{field:'accessMethod',title:'获取方式',sort:true,width:100,templet:function(d){
+                                                    if(d.accessMethod=='0')
+                                                        return "<span  style='color:green'>委托邮政寄递</span>";
+                                                    else if(d.accessMethod=='1')
+                                                        return "前往窗口自取";
+                                                }},
+                                            {field:'address',title:'住址',width:100},
+                                            {field:'area',title:'地区',width:100},
+                                            {field:'receiverName',title:'收件人姓名',width:100},
+                                            {field:'phoneNumber',title:'手机号码',width:100},
+                                            {field:'postCode',title:'邮政编码',width:100},
+                                            {field:'username',title:'用户名',width:100},
+                                            {field:'applyDate',title:'申请日期',width:100},
+                                            {field:'status',title:'状态',sort:true,width:100,templet:function(d){
+                                                    if(d.status=='1')
+                                                        return "受理完成";
+                                                    else if(d.status=='0')
+                                                        return "<span  style='color:red'>不予受理</span>";
+                                                    else if(d.status=='2')
+                                                        return "<span  style='color:green'>申请中</span>";
+                                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                                            {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
+                                        ]],
+                                        page:true,    //开启分页
+                                        limits: [3,5,10],  //一页选择显示3,5或10条数据
+                                        limit: 10,  //一页显示10条数据
+                                        parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                                            var result;
+                                            console.log(this);
+                                            console.log(JSON.stringify(res));
+                                            if(this.page.curr){
+                                                result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
+                                            }
+                                            else{
+                                                result=res.data.slice(0,this.limit);
+                                            }
+                                            return {
+                                                "code": res.code, //解析接口状态
+                                                "msg": res.msg, //解析提示文本
+                                                "count": res.count, //解析数据长度
+                                                "data": result //解析数据列表
+                                            };
+                                        },
+                                        //设置表格工具栏
+                                        toolbar:"#toolbar"
+                                    });
+                                })
                                    break;
                         }
                 });
@@ -382,7 +545,15 @@
 
                    switch (eventName) {
                        case "accept":
-                                   getiframe('/exemptCheck/getinfo.do?acNumber='+tr.acNumber);
+                                   if(tr.status!=2){
+                                       layer.open({
+                                           type: 0,
+                                           offset: '100px',
+                                           content: '当前状态不可受理' //这里content是一个普通的String
+                                       });
+                                   }else{
+                                       getiframe('/exemptCheck/getinfo.do?acNumber='+tr.acNumber);
+                                   }
                                    break;
                         case "forbid":
                                    changeStatus(tr.vlnumber,0);

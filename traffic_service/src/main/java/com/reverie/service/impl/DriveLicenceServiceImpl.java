@@ -29,7 +29,7 @@ public class DriveLicenceServiceImpl implements DriveLicenceService {
 
     @Override
     public int delete(String dlnumber) {
-        return 0;
+        return drivinglicenceMapper.deleteByPrimaryKey(dlnumber);
     }
 
     @Override

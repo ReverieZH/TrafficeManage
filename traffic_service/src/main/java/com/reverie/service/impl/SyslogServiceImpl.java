@@ -23,16 +23,13 @@ public class SyslogServiceImpl implements SyslogService {
     }
 
     @Override
-    public List<Syslog> findAll(int page, int size) {
+    public List<Syslog> selectAll() {
         //参数pageNum是页码值，参数pageSize代表的是每页显示条数
-        PageHelper.startPage(page,size);
         return syslogMapper.findAll();
     }
 
     @Override
-    public List<Syslog> findByJobNumber(String jobNumber, Integer page, Integer size) {
-        String jobNumberStr = "%" + jobNumber + "%";
-        PageHelper.startPage(page,size);
-        return syslogMapper.findByJobNumber(jobNumberStr);
+    public List<Syslog> findByJobNumber(String jobNumber) {
+        return syslogMapper.findByJobNumber(jobNumber);
     }
 }

@@ -4,6 +4,7 @@ package com.reverie.controller;
 import com.reverie.domain.Applyexemptedcheck;
 import com.reverie.domain.Car;
 import com.reverie.domain.LayUI;
+import com.reverie.domain.Platenumberapply;
 import com.reverie.service.ApplyExemptedCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,24 @@ public class ApplyExemptedCheckController {
         }
         return layUI;
     }
-
+    @RequestMapping("/selectdatamain.do")
+    @ResponseBody
+    public LayUI selectPlateNumberApplyList(HttpServletRequest request,String status, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
+        LayUI<Applyexemptedcheck> layUI=new LayUI();
+        List<Applyexemptedcheck> applyexemptedchecks = applyExemptedCheckService.selectCondiion(status);
+        if(applyexemptedchecks!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(applyexemptedchecks.size());
+            layUI.setData(applyexemptedchecks);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
     @RequestMapping("/getinfo.do")
     public String getinfo(HttpServletRequest request,String acNumber){
         Applyexemptedcheck applyexemptedcheck = applyExemptedCheckService.selectoneById(acNumber);

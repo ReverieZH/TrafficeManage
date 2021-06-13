@@ -2,6 +2,7 @@ package com.reverie.controller;
 
 import com.reverie.domain.LayUI;
 import com.reverie.domain.Operator;
+import com.reverie.domain.Syslog;
 import com.reverie.domain.User;
 import com.reverie.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller      //@ResponseBody+@Controller
@@ -29,10 +31,31 @@ public class OperatorController {
 
     @RequestMapping("/datamain.do")
     @ResponseBody
-    public LayUI getPlateNumberList(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
+    public LayUI getPlateNumberList(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer size){
         LayUI<Operator> layUI=new LayUI();
-        List<Operator> operators = operatorService.selectAll();
+        List<Operator> operators = operatorService.selectAll(page,size);
         System.out.println(operators);
+        if(operators!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(operators.size());
+            layUI.setData(operators);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/seletcById.do")
+    @ResponseBody
+    public LayUI searchById(HttpServletRequest request, @RequestParam String jobnumber,@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
+        LayUI<Operator> layUI=new LayUI();
+        Operator operator = operatorService.selectByKey(jobnumber);
+        List<Operator> operators=new ArrayList<>();
+        operators.add(operator);
         if(operators!=null){
             layUI.setCode("0");
             layUI.setMsg("成功");

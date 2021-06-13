@@ -1,7 +1,11 @@
 package com.reverie.mapper;
 
 import com.reverie.domain.Platenumber;
+import com.reverie.domain.User;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -22,4 +26,16 @@ public interface PlatenumberMapper extends Mapper<Platenumber> {
             "</foreach>"+
             "</script>")
     public int deletePlateNumberList(List<String> plateNumberList);
+
+    @Select("select * from platenumber where plate_number like #{platenumber}")
+    @Results({
+            @Result(column = "plate_number",property = "plateNumber",id = true),
+            @Result(column = "issue_date",property = "issueDate"),
+            @Result(column = "status",property = "status"),
+            @Result(column = "location_name",property = "locationName"),
+            @Result(column = "province",property = "province"),
+            @Result(column = "city",property = "city"),
+            @Result(column = "plate_head",property = "plateHead"),
+    })
+    public List<Platenumber> findPlateNumberLike(String platenumber);
 }

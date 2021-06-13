@@ -5,7 +5,7 @@
 <% String path = request.getContextPath();
     String basePath = request.getScheme() + "://"
             + request.getServerName() + ":" + request.getServerPort()
-            + path + "/";
+            + path;
 %>
 <!DOCTYPE html>
 <html>
@@ -265,6 +265,66 @@
                 }
             }
         }
+
+        function search() {
+            var searchById = document.getElementById("searchById").value;
+            layui.use("table", function () {
+                    var table = layui.table;
+
+                    table.render({
+                        elem: "#plateNumber_table",                 //容器id
+                        url:"/operator/seletcById.do?jobnumber="+searchById,  //数据接口
+                        cols:[[
+                            {field:'num',type:"numbers"},
+                            {field:'check',type:"checkbox"},
+                            {field:'jobnumber',title:'工号',sort:true,width:120},
+                            {field:'password',title:'密码',width:100},
+                            {field:'rid',title:'角色',width:100,templet:function(d){
+                                    if(d.rid=='2')
+                                        return "管理员";
+                                    else if(d.rid=='1')
+                                        return "超级管理员";
+                                    else if(d.rid=='3')
+                                        return "业务人员";
+                                }},
+                            {field:'name',title:'姓名',width:100},
+                            {field:'sex',title:'性别',width:100},
+                            {field:'department',title:'部门',width:100},
+                            {field:'vaild',title:'状态',sort:true,width:100,templet:function(d){
+                                    if(d.vaild=='1')
+                                        return "正常使用";
+                                    else if(d.vaild=='0')
+                                        return "<span  style='color:red'>限制使用</span>";
+                                    else if(d.vaild=='2')
+                                        return "<span  style='color:green'>申请中</span>";
+                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                            {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
+                        ]],
+                        page: true,    //开启分页
+                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                        limit: 10,  //一页显示10条数据
+                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                            var result;
+                            console.log(this);
+                            console.log(JSON.stringify(res));
+                            if (this.page.curr) {
+                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                            } else {
+                                result = res.data.slice(0, this.limit);
+                            }
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.count, //解析数据长度
+                                "data": result //解析数据列表
+                            };
+                        },
+                        //设置表格工具栏
+                        toolbar: "#toolbar"
+                    });
+                }
+            )
+        }
     </script>
 
 </head>
@@ -274,10 +334,16 @@
     <table id="plateNumber_table"  lay-filter="headtoolbar"></table>
 
     <script type="text/html" id="toolbar">
-        <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
 <%--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--%>
-        </div>
+            <div>
+                <div class="layui-btn-container" style="float: left">
+                    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+                    <button class="layui-btn layui-btn-sm" lay-event="findAll">全部</button>
+                </div>
+                <div style="float: left">
+                    <input type="text" id="searchById" name="searchById" placeholder="输入工号查找"  class="layui-input" onchange="search()" style="width: 150px;height: 30px" >
+                </div>
+            </div>
     </script>
 
     <script type="text/html" id="bar">
@@ -298,10 +364,17 @@
                         {field:'check',type:"checkbox"},
                         {field:'jobnumber',title:'工号',sort:true,width:120},
                         {field:'password',title:'密码',width:100},
-                        {field:'role',title:'角色',width:100},
+                        {field:'rid',title:'角色',width:100,templet:function(d){
+                                if(d.rid=='2')
+                                    return "管理员";
+                                else if(d.rid=='1')
+                                    return "超级管理员";
+                                else if(d.rid=='3')
+                                    return "业务人员";
+                        }},
                         {field:'name',title:'姓名',width:100},
                         {field:'sex',title:'性别',width:100},
-                        {field:'department',title:'department',width:100},
+                        {field:'department',title:'部门',width:100},
                         {field:'vaild',title:'状态',sort:true,width:100,templet:function(d){
                                 if(d.vaild=='1')
                                     return "正常使用";
@@ -313,6 +386,25 @@
                         {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
                     ]],
                     page:true,    //开启分页
+                    limits: [3,5,10],  //一页选择显示3,5或10条数据
+                    limit: 10,  //一页显示10条数据
+                    parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                            var result;
+                            console.log(this);
+                            console.log(JSON.stringify(res));
+                            if(this.page.curr){
+                                result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
+                            }
+                            else{
+                                result=res.data.slice(0,this.limit);
+                            }
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.count, //解析数据长度
+                                "data": result //解析数据列表
+                            };
+                    },
                     //设置表格工具栏
                     toolbar:"#toolbar"
                 });
@@ -327,6 +419,72 @@
                             case "add":
                                   getiframe('/operator/getaddOperator.do');
                                   break;
+                            case "findAll":
+                                layui.use("table",function () {
+                                    var table = layui.table;
+
+                                    table.render({
+                                        elem: "#plateNumber_table",                 //容器id
+                                        url: "/operator/datamain.do",  //数据接口
+                                        cols: [[
+                                            {field: 'num', type: "numbers"},
+                                            {field: 'check', type: "checkbox"},
+                                            {field: 'jobnumber', title: '工号', sort: true, width: 120},
+                                            {field: 'password', title: '密码', width: 100},
+                                            {
+                                                field: 'rid', title: '角色', width: 100, templet: function (d) {
+                                                    if(d.rid=='2')
+                                                        return "管理员";
+                                                    else if(d.rid=='1')
+                                                        return "超级管理员";
+                                                    else if(d.rid=='3')
+                                                        return "业务人员";
+                                                }
+                                            },
+                                            {field: 'name', title: '姓名', width: 100},
+                                            {field: 'sex', title: '性别', width: 100},
+                                            {field: 'department', title: '部门', width: 100},
+                                            {
+                                                field: 'vaild',
+                                                title: '状态',
+                                                sort: true,
+                                                width: 100,
+                                                templet: function (d) {
+                                                    if (d.vaild == '1')
+                                                        return "正常使用";
+                                                    else if (d.vaild == '0')
+                                                        return "<span  style='color:red'>限制使用</span>";
+                                                    else if (d.vaild == '2')
+                                                        return "<span  style='color:green'>申请中</span>";
+                                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/
+                                                }
+                                            },
+                                            {field: "操作", toolbar: "#bar", fixed: "right", width: 300}           //设置表头工具栏
+                                        ]],
+                                        page: true,    //开启分页
+                                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                                        limit: 10,  //一页显示10条数据
+                                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                                            var result;
+                                            console.log(this);
+                                            console.log(JSON.stringify(res));
+                                            if (this.page.curr) {
+                                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                                            } else {
+                                                result = res.data.slice(0, this.limit);
+                                            }
+                                            return {
+                                                "code": res.code, //解析接口状态
+                                                "msg": res.msg, //解析提示文本
+                                                "count": res.count, //解析数据长度
+                                                "data": result //解析数据列表
+                                            };
+                                        },
+                                        //设置表格工具栏
+                                        toolbar: "#toolbar"
+                                    });
+                                })
+                                break;
                             case "delete":
                                     var arr=checkStatus.data;
                                     var url="";

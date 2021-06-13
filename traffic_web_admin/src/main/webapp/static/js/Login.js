@@ -81,7 +81,12 @@
             location.href="manage/main.do";
             //alert("正确");
           }else{
-            alert("登陆失败");
+            layui.use('layer', function(){
+              var layer = layui.layer;
+              layer.confirm('请输入正确的用户名和密码', {
+                btn: ['确认'] //按钮
+              });
+            });
           }
           //获取元素对象
         }else if(ajax.status==404){
