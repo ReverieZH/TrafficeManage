@@ -265,6 +265,73 @@
                 }
             }
         }
+
+        function search(url) {
+            layui.use("table", function () {
+                    var table = layui.table;
+                    table.render({
+                        elem: "#plateNumber_table",                 //容器id
+                        url:url,  //数据接口
+                        cols:[[
+                            {field:'num',type:"numbers"},
+                            {field:'check',type:"checkbox"},
+                            {field:'vlnumber',title:'行驶证编号',sort:true,width:120},
+                            {field:'plateNumber',title:'车牌号',width:100},
+                            {field:'carType',title:'车辆类型',width:100},
+                            {field:'owner',title:'所有人',width:100},
+                            {field:'address',title:'住址',width:100},
+                            {field:'brandModel',title:'品牌模型',width:100},
+                            {field:'vin',title:'VIN号',width:100},
+                            {field:'engineNumber',title:'发动机号码',width:100},
+                            {field:'registationDate',title:'注册日期',width:100},
+                            {field:'issueDate',title:'发证日期',width:100},
+                            {field:'status',title:'状态',sort:true,width:100,templet:function(d){
+                                    if(d.status=='1')
+                                        return "正常使用";
+                                    else if(d.status=='0')
+                                        return "<span  style='color:red'>限制使用</span>";
+                                    else if(d.status=='2')
+                                        return "<span  style='color:green'>申请中</span>";
+                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                            {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
+                        ]],
+                        page: true,    //开启分页
+                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                        limit: 10,  //一页显示10条数据
+                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                            var result;
+                            console.log(this);
+                            console.log(JSON.stringify(res));
+                            if (this.page.curr) {
+                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                            } else {
+                                result = res.data.slice(0, this.limit);
+                            }
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.count, //解析数据长度
+                                "data": result //解析数据列表
+                            };
+                        },
+                        //设置表格工具栏
+                        toolbar: "#toolbar"
+                    });
+                }
+            )
+        }
+
+        function searchByVlnumber() {
+            var searchByVlnumber=document.getElementById("searchByVlnumber").value;
+            search("/vehiclelicense/serach.do?vlnumber="+searchByVlnumber);
+        }
+        function searchByName() {
+            var searchByName=document.getElementById("searchByName").value;
+            search("/vehiclelicense/serachByName.do?name="+searchByName);
+        }
+        function  findAll() {
+            search("/vehiclelicense/datamain.do");
+        }
     </script>
 
 </head>
@@ -274,9 +341,17 @@
     <table id="plateNumber_table"  lay-filter="headtoolbar"></table>
 
     <script type="text/html" id="toolbar">
-        <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
-<%--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--%>
+        <div>
+            <div class="layui-btn-container" style="float: left">
+                <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+                <button class="layui-btn layui-btn-sm" lay-event="findAll">全部</button>
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByVlnumber" name="searchByVlnumber" placeholder="输入行驶证编号查找"  class="layui-input" onchange="searchByVlnumber()" style="width: 150px;height: 30px" >
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByName" name="searchByName" placeholder="输入姓名查找"  class="layui-input" onchange="searchByName()" style="width: 150px;height: 30px" >
+            </div>
         </div>
     </script>
 
@@ -350,6 +425,9 @@
                             case "add":
                                   getiframe('/vehiclelicense/getaddVehiclelicense.do');
                                   break;
+                            case "findAll":
+                                    findAll();
+                                    break;
                             case "delete":
                                     var arr=checkStatus.data;
                                     var url="";

@@ -70,5 +70,17 @@ public class CheckReservationServiceImpl implements CheckReservationService {
         return checkreservationMapper.updateByPrimaryKeySelective(checkreservation);
     }
 
+    @Override
+    public List<Checkreservation> searchByReverseNumber(String applyNumberStr) {
+        String applyNumber="%"+applyNumberStr+"%";
+        return checkreservationMapper.searchByReverseNumber(applyNumber);
+    }
+
+    @Override
+    public List<Checkreservation> searchByUser(String usernameStr) {
+        String username="%"+usernameStr+"%";
+        return checkreservationMapper.searchByUser(username);
+    }
+
 
 }

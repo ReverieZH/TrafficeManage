@@ -1,5 +1,6 @@
 package com.reverie.controller;
 
+import com.reverie.domain.Car;
 import com.reverie.domain.LayUI;
 import com.reverie.domain.Platenumber;
 import com.reverie.domain.Platenumberapply;
@@ -66,6 +67,43 @@ public class PlateNumberApplyController {
         return layUI;
     }
 
+    @RequestMapping("/search.do")
+    @ResponseBody
+    public LayUI search(HttpServletRequest request,  @RequestParam String applyNumber){
+        LayUI<Platenumberapply> layUI=new LayUI();
+        List<Platenumberapply> platenumberapplies = plateNumberApplyService.searchByApplyNumber(applyNumber);
+        if(platenumberapplies!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(platenumberapplies.size());
+            layUI.setData(platenumberapplies);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/serachByUser.do")
+    @ResponseBody
+    public LayUI serachByUser(HttpServletRequest request,  @RequestParam String username){
+        LayUI<Platenumberapply> layUI=new LayUI();
+        List<Platenumberapply> platenumberapplies = plateNumberApplyService.searchByUser(username);
+        if(platenumberapplies!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(platenumberapplies.size());
+            layUI.setData(platenumberapplies);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
 
     @RequestMapping("/gethandle.do")
     public String gethandle(HttpServletRequest request,String applyNumber){

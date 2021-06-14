@@ -9,6 +9,8 @@ public interface DriveLicenceService {
 
     public List<Drivinglicence> selectAll();
 
+    public List<Drivinglicence> searchByName(String name);
+
     public int delete(String dlnumber);
 
     public int deleteList(List<String> drivinglicence);

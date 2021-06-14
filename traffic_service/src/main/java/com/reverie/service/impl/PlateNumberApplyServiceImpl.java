@@ -39,6 +39,20 @@ public class PlateNumberApplyServiceImpl implements PlateNumberApplyService {
     }
 
     @Override
+    public List<Platenumberapply> searchByUser(String usernameStr) {
+        String username="%"+usernameStr+"%";
+        return platenumberapplyMapper.searchByUser(username);
+    }
+
+    @Override
+    public List<Platenumberapply> searchByApplyNumber(String applyNumberStr) {
+        String applyNumber="%"+applyNumberStr+"%";
+        return platenumberapplyMapper.searchByApplyNumber(applyNumber);
+    }
+
+
+
+    @Override
     public int delete(String applyNumber) {
         return platenumberapplyMapper.deleteByPrimaryKey(applyNumber);
     }

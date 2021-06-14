@@ -36,6 +36,18 @@ public class ApplyExemptedCheckServiceImpl implements ApplyExemptedCheckService 
     }
 
     @Override
+    public List<Applyexemptedcheck> searchByAcNumber(String acNumberStr) {
+        String acNumber="%"+acNumberStr+"%";
+        return applyExemptedCheckMapper.searchByAcNumber(acNumber);
+    }
+
+    @Override
+    public List<Applyexemptedcheck> searchByUser(String usernameStr) {
+        String username="%"+usernameStr+"%";
+        return applyExemptedCheckMapper.searchByUser(username);
+    }
+
+    @Override
     public List<Applyexemptedcheck> selectByUser(String username) {
         Applyexemptedcheck applyExemptedCheck=new Applyexemptedcheck();
         applyExemptedCheck.setUsername(username);

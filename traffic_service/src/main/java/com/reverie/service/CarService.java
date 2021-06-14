@@ -10,6 +10,10 @@ public interface CarService {
 
     public List<Car> selectAll();
 
+    public List<Car> searchByPlateNumber(String plateNumber);
+
+    public List<Car> searchByName(String name);
+
     public int delete(String platenumber);
 
     public int deleteList(List<String> platenumber);

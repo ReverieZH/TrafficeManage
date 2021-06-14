@@ -61,4 +61,16 @@ public class LoseReplaceServiceImpl implements LoseReplaceService {
         losereplace.setStatus(status);
         return losereplaceMapper.updateByPrimaryKeySelective(losereplace);
     }
+
+    @Override
+    public List<Losereplace> searchByLoseReplaceNumber(String loseReplaceNumberStr) {
+        String loseReplaceNumber="%"+loseReplaceNumberStr+"%";
+        return losereplaceMapper.searchByLoseReplaceNumber(loseReplaceNumber);
+    }
+
+    @Override
+    public List<Losereplace> searchByUser(String usernameStr) {
+        String username="%"+usernameStr+"%";
+        return losereplaceMapper.searchByUser(username);
+    }
 }

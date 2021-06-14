@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,6 +33,46 @@ public class driveLicenceController {
     public LayUI getPlateNumberList(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
         LayUI<Drivinglicence> layUI=new LayUI();
         List<Drivinglicence> drivinglicences =driveLicenceService .selectAll();
+        if(drivinglicences!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(drivinglicences.size());
+            layUI.setData(drivinglicences);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/search.do")
+    @ResponseBody
+    public LayUI search(HttpServletRequest request,  @RequestParam String dlnumber){
+        LayUI<Drivinglicence> layUI=new LayUI();
+        List<Drivinglicence> drivinglicences=new ArrayList<>();
+        Drivinglicence drivinglicence=driveLicenceService.selectByKey(dlnumber);
+        drivinglicences.add(drivinglicence);
+        if(drivinglicences!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(drivinglicences.size());
+            layUI.setData(drivinglicences);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/serachByName.do")
+    @ResponseBody
+    public LayUI serachByName(HttpServletRequest request,  @RequestParam String name){
+        LayUI<Drivinglicence> layUI=new LayUI();
+        List<Drivinglicence> drivinglicences=driveLicenceService.searchByName(name);
         if(drivinglicences!=null){
             layUI.setCode("0");
             layUI.setMsg("成功");

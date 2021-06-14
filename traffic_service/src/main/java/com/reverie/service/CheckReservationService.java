@@ -17,4 +17,8 @@ public interface CheckReservationService {
     public Checkreservation selecyById(String reserveNumber);
 
     public int handle(String reserveNumber,String status);
+
+    List<Checkreservation> searchByReverseNumber(String applyNumber);
+
+    List<Checkreservation> searchByUser(String username);
 }

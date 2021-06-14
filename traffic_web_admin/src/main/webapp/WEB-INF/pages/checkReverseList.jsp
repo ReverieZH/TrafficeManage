@@ -265,6 +265,78 @@
                 }
             }
         }
+
+        function search(url) {
+            layui.use("table", function () {
+                    var table = layui.table;
+                    table.render({
+                        elem: "#plateNumber_table",                 //容器id
+                        url:url,  //数据接口
+                        cols:[[
+                            {field:'num',type:"numbers"},
+                            {field:'check',type:"checkbox"},
+                            {field:'reserveNumber',title:'预约号码',sort:true,width:120},
+                            {field:'plateNumber',title:'车牌号码',width:100},
+                            {field:'owner',title:'所有人',width:100},
+                            {field:'carType',title:'车辆类型',width:100},
+                            {field:'drivingType',title:'驱动方式',width:100},
+                            {field:'fuelType',title:'燃油类型',width:100},
+                            {field:'checkStation',title:'监测站',width:100},
+                            {field:'checkDate',title:'预约检测日期',width:100},
+                            {field:'startTime',title:'预约时段开始时间',width:100},
+                            {field:'endTime',title:'预约时段结束时间',width:100},
+                            {field:'username',title:'用户名',width:100},
+                            {field:'reserveDate',title:'预约日期',width:100},
+                            {field:'status',title:'状态',sort:true,width:100,templet:function(d){
+                                    if(d.status=='1')
+                                        return "<span  style='color:green'>预约成功</span>";
+                                    else if(d.status=='0')
+                                        return "<span  style='color:red'>预约失败</span>";
+                                    else if(d.status=='2')
+                                        return "<span  style='color:blue'>申请中</span>";
+                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                            {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
+                        ]],
+                        page: true,    //开启分页
+                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                        limit: 10,  //一页显示10条数据
+                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                            var result;
+                            console.log(this);
+                            console.log(JSON.stringify(res));
+                            if (this.page.curr) {
+                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                            } else {
+                                result = res.data.slice(0, this.limit);
+                            }
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.count, //解析数据长度
+                                "data": result //解析数据列表
+                            };
+                        },
+                        //设置表格工具栏
+                        toolbar: "#toolbar"
+                    });
+                }
+            )
+        }
+
+        function searchByReserveNumber() {
+            var searchByReserveNumber=document.getElementById("searchByReserveNumber").value;
+            search("/checkReverse/serach.do?reserveNumber="+searchByReserveNumber);
+        }
+        function searchByUser() {
+            var searchByUser=document.getElementById("searchByUser").value;
+            search("/checkReverse/serachByUser.do?username="+searchByUser);
+        }
+        function  findAll() {
+            search("/checkReverse/datamain.do");
+        }
+        function selectApply() {
+            search("/checkReverse/applyingData.do")
+        }
     </script>
 
 </head>
@@ -274,10 +346,17 @@
     <table id="plateNumber_table"  lay-filter="headtoolbar"></table>
 
     <script type="text/html" id="toolbar">
-        <div class="layui-btn-container">
-<%--            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>--%>
-    <button class="layui-btn layui-btn-sm" lay-event="selectAll">所有数据</button>
-    <button class="layui-btn layui-btn-sm" lay-event="selectApplying">申请中</button>
+        <div>
+            <div class="layui-btn-container" style="float: left">
+                <button class="layui-btn layui-btn-sm" lay-event="selectAll">所有数据</button>
+                <button class="layui-btn layui-btn-sm" lay-event="selectApplying">申请中</button>
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByReserveNumber" name="searchByReserveNumber" placeholder="输入预约编号查找"  class="layui-input" onchange="searchByReserveNumber()" style="width: 150px;height: 30px" >
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByUser" name="searchByUser" placeholder="输入用户名查找"  class="layui-input" onchange="searchByUser()" style="width: 150px;height: 30px" >
+            </div>
         </div>
     </script>
 
@@ -354,132 +433,10 @@
                                   getiframe('/driveLicence/getaddDriveLicence.do');
                                   break;
                             case "selectApplying":
-                                layui.use("table",function () {
-                                    var table = layui.table;
-
-                                    table.render({
-                                        elem: "#plateNumber_table",                 //容器id
-                                        url: "/checkReverse/applyingData.do",  //数据接口
-                                        cols: [[
-                                            {field: 'num', type: "numbers"},
-                                            {field: 'check', type: "checkbox"},
-                                            {field: 'reserveNumber', title: '预约号码', sort: true, width: 120},
-                                            {field: 'plateNumber', title: '车牌号码', width: 100},
-                                            {field: 'owner', title: '所有人', width: 100},
-                                            {field: 'carType', title: '车辆类型', width: 100},
-                                            {field: 'drivingType', title: '驱动方式', width: 100},
-                                            {field: 'fuelType', title: '燃油类型', width: 100},
-                                            {field: 'checkStation', title: '监测站', width: 100},
-                                            {field: 'checkDate', title: '预约检测日期', width: 100},
-                                            {field: 'startTime', title: '预约时段开始时间', width: 100},
-                                            {field: 'endTime', title: '预约时段结束时间', width: 100},
-                                            {field: 'username', title: '用户名', width: 100},
-                                            {field: 'reserveDate', title: '预约日期', width: 100},
-                                            {
-                                                field: 'status',
-                                                title: '状态',
-                                                sort: true,
-                                                width: 100,
-                                                templet: function (d) {
-                                                    if (d.status == '1')
-                                                        return "<span  style='color:green'>预约成功</span>";
-                                                    else if (d.status == '0')
-                                                        return "<span  style='color:red'>预约失败</span>";
-                                                    else if (d.status == '2')
-                                                        return "<span  style='color:blue'>申请中</span>";
-                                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/
-                                                }
-                                            },
-                                            {field: "操作", toolbar: "#bar", fixed: "right", width: 300}           //设置表头工具栏
-                                        ]],
-                                        page: true,    //开启分页
-                                        limits: [3,5,10],  //一页选择显示3,5或10条数据
-                                        limit: 10,  //一页显示10条数据
-                                        parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
-                                            var result;
-                                            console.log(this);
-                                            console.log(JSON.stringify(res));
-                                            if(this.page.curr){
-                                                result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
-                                            }
-                                            else{
-                                                result=res.data.slice(0,this.limit);
-                                            }
-                                            return {
-                                                "code": res.code, //解析接口状态
-                                                "msg": res.msg, //解析提示文本
-                                                "count": res.count, //解析数据长度
-                                                "data": result //解析数据列表
-                                            };
-                                        },
-                                        //设置表格工具栏
-                                        toolbar: "#toolbar"
-                                    });
-                                })
+                                    selectApply();
                                     break;
                             case "selectAll":
-                                layui.use("table",function () {
-                                    var table = layui.table;
-
-                                    table.render({
-                                        elem: "#plateNumber_table",                 //容器id
-                                        url: "/checkReverse/datamain.do",  //数据接口
-                                        cols: [[
-                                            {field: 'num', type: "numbers"},
-                                            {field: 'check', type: "checkbox"},
-                                            {field: 'reserveNumber', title: '预约号码', sort: true, width: 120},
-                                            {field: 'plateNumber', title: '车牌号码', width: 100},
-                                            {field: 'owner', title: '所有人', width: 100},
-                                            {field: 'carType', title: '车辆类型', width: 100},
-                                            {field: 'drivingType', title: '驱动方式', width: 100},
-                                            {field: 'fuelType', title: '燃油类型', width: 100},
-                                            {field: 'checkStation', title: '监测站', width: 100},
-                                            {field: 'checkDate', title: '预约检测日期', width: 100},
-                                            {field: 'startTime', title: '预约时段开始时间', width: 100},
-                                            {field: 'endTime', title: '预约时段结束时间', width: 100},
-                                            {field: 'username', title: '用户名', width: 100},
-                                            {field: 'reserveDate', title: '预约日期', width: 100},
-                                            {
-                                                field: 'status',
-                                                title: '状态',
-                                                sort: true,
-                                                width: 100,
-                                                templet: function (d) {
-                                                    if (d.status == '1')
-                                                        return "<span  style='color:green'>预约成功</span>";
-                                                    else if (d.status == '0')
-                                                        return "<span  style='color:red'>预约失败</span>";
-                                                    else if (d.status == '2')
-                                                        return "<span  style='color:blue'>申请中</span>";
-                                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/
-                                                }
-                                            },
-                                            {field: "操作", toolbar: "#bar", fixed: "right", width: 300}           //设置表头工具栏
-                                        ]],
-                                        page: true,    //开启分页
-                                        limits: [3,5,10],  //一页选择显示3,5或10条数据
-                                        limit: 10,  //一页显示10条数据
-                                        parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
-                                            var result;
-                                            console.log(this);
-                                            console.log(JSON.stringify(res));
-                                            if(this.page.curr){
-                                                result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
-                                            }
-                                            else{
-                                                result=res.data.slice(0,this.limit);
-                                            }
-                                            return {
-                                                "code": res.code, //解析接口状态
-                                                "msg": res.msg, //解析提示文本
-                                                "count": res.count, //解析数据长度
-                                                "data": result //解析数据列表
-                                            };
-                                        },
-                                        //设置表格工具栏
-                                        toolbar: "#toolbar"
-                                    });
-                                })
+                                findAll();
                                 break;
                             case "delete":
                                     var arr=checkStatus.data;

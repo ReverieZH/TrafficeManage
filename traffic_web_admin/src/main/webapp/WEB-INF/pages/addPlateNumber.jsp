@@ -142,7 +142,7 @@
 						<tr>
 							<td width="10%" height="50" align="right">省份:<span style="color: red;">*</span></td>
 							<td width="10%" height="50" align="left">
-								<select name="province" id="province" lay-verify="required" lay-search lay-filter="province">
+				i				<select name="province" id="province" lay-verify="required" lay-search lay-filter="province">
 									<option value="">省份</option>
 								</select>
 <%--								<input id="province" name="province" type="text">--%>

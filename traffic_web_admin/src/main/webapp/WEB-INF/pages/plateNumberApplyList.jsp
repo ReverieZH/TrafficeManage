@@ -266,62 +266,78 @@
             }
         }
 
-        function datamain() {
-
-            layui.use("table",function () {
-                var table = layui.table;
-
-                table.render({
-                    elem: "#plateNumber_table",                 //容器id
-                    url: "/plateNumberApply/datamain.do",  //数据接口
-                    cols: [[
-                        {field: 'num', type: "numbers"},
-                        {field: 'check', type: "checkbox"},
-                        {field: 'applyNumber', title: '申请编号', sort: true, width: 120},
-                        {field: 'vehicleProof', title: '机动车凭证', width: 100},
-                        {field: 'certificateNumber', title: '合格证号', width: 100},
-                        {field: 'brandModel', title: '品牌型号', width: 100},
-                        {field: 'vin', title: 'VIN', width: 100},
-                        {field: 'optionalPlateHead', title: '可选号牌头', width: 100},
-                        {field: 'phoneNumber', title: '号码', width: 100},
-                        {field: 'username', title: '用户名', width: 100},
-                        {
-                            field: 'status', title: '状态', sort: true, width: 100, templet: function (d) {
-                                if (d.status == '1')
-                                    return "正常使用";
-                                else if (d.status == '0')
-                                    return "<span  style='color:red'>限制使用</span>";
-                                else if (d.status == '2')
-                                    return "<span  style='color:green'>申请中</span>";
+        function search(url) {
+            layui.use("table", function () {
+                    var table = layui.table;
+                    table.render({
+                        elem: "#plateNumber_table",                 //容器id
+                        url:url,  //数据接口
+                        cols: [[
+                            {field: 'num', type: "numbers"},
+                            {field: 'check', type: "checkbox"},
+                            {field: 'applyNumber', title: '申请编号', sort: true, width: 120},
+                            {field: 'vehicleProof', title: '机动车凭证', width: 100},
+                            {field: 'certificateNumber', title: '合格证号', width: 100},
+                            {field: 'brandModel', title: '品牌型号', width: 100},
+                            {field: 'vin', title: 'VIN', width: 100},
+                            {field: 'optionalPlateHead', title: '可选号牌头', width: 100},
+                            {field: 'phoneNumber', title: '电话号码', width: 100},
+                            {field: 'username', title: '用户名', width: 100},
+                            {
+                                field: 'status', title: '状态', sort: true, width: 100, templet: function (d) {
+                                    if (d.status == '1')
+                                        return "申请成功";
+                                    else if (d.status == '0')
+                                        return "<span  style='color:red'>申请失败</span>";
+                                    else if (d.status == '2')
+                                        return "<span  style='color:blue'>申请中</span>";
+                                    else if (d.status == '3')
+                                        return "<span  style='color:green'>选号成功</span>";
+                                }
+                            },
+                            {field: "操作", toolbar: "#bar", fixed: "right",width:300}           //设置表头工具栏
+                        ]],
+                        page: true,    //开启分页
+                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                        limit: 10,  //一页显示10条数据
+                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                            var result;
+                            console.log(this);
+                            console.log(JSON.stringify(res));
+                            if (this.page.curr) {
+                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                            } else {
+                                result = res.data.slice(0, this.limit);
                             }
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.count, //解析数据长度
+                                "data": result //解析数据列表
+                            };
                         },
-                        {field: "操作", toolbar: "#bar", fixed: "right"}           //设置表头工具栏
-                    ]],
-                    page: true,    //开启分页
-                    limits: [3,5,10],  //一页选择显示3,5或10条数据
-                    limit: 10,  //一页显示10条数据
-                    parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
-                        var result;
-                        console.log(this);
-                        console.log(JSON.stringify(res));
-                        if(this.page.curr){
-                            result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
-                        }
-                        else{
-                            result=res.data.slice(0,this.limit);
-                        }
-                        return {
-                            "code": res.code, //解析接口状态
-                            "msg": res.msg, //解析提示文本
-                            "count": res.count, //解析数据长度
-                            "data": result //解析数据列表
-                        };
-                    },
-                    //设置表格工具栏
-                    toolbar: "#toolbar"
-                });
-            })
+                        //设置表格工具栏
+                        toolbar: "#toolbar"
+                    });
+                }
+            )
         }
+
+        function searchByApplyNumber() {
+            var searchByApplyNumber=document.getElementById("searchByApplyNumber").value;
+            search("/plateNumberApply/serach.do?applyNumber="+searchByApplyNumber);
+        }
+        function searchByUser() {
+            var searchByUser=document.getElementById("searchByUser").value;
+            search("/plateNumberApply/serachByUser.do?username="+searchByUser);
+        }
+        function  findAll() {
+            search("/plateNumberApply/datamain.do");
+        }
+        function selectApply() {
+            search("/plateNumberApply/selectdatamain.do?status=2")
+        }
+
     </script>
 
 </head>
@@ -331,11 +347,17 @@
     <table id="plateNumber_table"  lay-filter="headtoolbar"></table>
 
     <script type="text/html" id="toolbar">
-        <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="datamain">所有数据</button>
-<%--            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>--%>
-<%--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--%>
-            <button class="layui-btn layui-btn-sm" lay-event="selectApply">申请中</button>
+        <div>
+            <div class="layui-btn-container" style="float: left">
+                <button class="layui-btn layui-btn-sm" lay-event="datamain">所有数据</button>
+                <button class="layui-btn layui-btn-sm" lay-event="selectApply">申请中</button>
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByApplyNumber" name="searchByApplyNumber" placeholder="输入申请编号查找"  class="layui-input" onchange="searchByApplyNumber()" style="width: 150px;height: 30px" >
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByUser" name="searchByUser" placeholder="输入用户名查找"  class="layui-input" onchange="searchByUser()" style="width: 150px;height: 30px" >
+            </div>
         </div>
     </script>
 
@@ -409,69 +431,13 @@
                         var eventName=obj.event;
                         switch (eventName) {
                             case "datamain":
-                                datamain();
+                                findAll();
                                 break;
                             case "add":
                                   getiframe('/plateNumberApply/getaddPlateNumberApply.do');
                                   break;
                             case "selectApply":
-                                layui.use("table",function () {
-                                    var table = layui.table;
-
-                                    table.render({
-                                        elem: "#plateNumber_table",                 //容器id
-                                        url: "/plateNumberApply/selectdatamain.do?status=2",  //数据接口
-                                        cols: [[
-                                            {field: 'num', type: "numbers"},
-                                            {field: 'check', type: "checkbox"},
-                                            {field: 'applyNumber', title: '申请编号', sort: true, width: 120},
-                                            {field: 'vehicleProof', title: '机动车凭证', width: 100},
-                                            {field: 'certificateNumber', title: '合格证号', width: 100},
-                                            {field: 'brandModel', title: '品牌型号', width: 100},
-                                            {field: 'vin', title: 'VIN', width: 100},
-                                            {field: 'optionalPlateHead', title: '可选号牌头', width: 100},
-                                            {field: 'phoneNumber', title: '号码', width: 100},
-                                            {field: 'username', title: '用户名', width: 100},
-                                            {
-                                                field: 'status',
-                                                title: '状态',
-                                                sort: true,
-                                                width: 100,
-                                                templet: function (d) {
-                                                    if (d.status == '1')
-                                                        return "申请成功";
-                                                    else if (d.status == '0')
-                                                        return "<span  style='color:red'>申请失败</span>";
-                                                    else if (d.status == '2')
-                                                        return "<span  style='color:green'>申请中</span>";
-                                                }
-                                            },
-                                            {field:"操作",toolbar:"#bar",fixed:"right",width:300}             //设置表头工具栏
-                                        ]],
-                                        page: true,    //开启分页
-                                        limits: [3,5,10],  //一页选择显示3,5或10条数据
-                                        limit: 10,  //一页显示10条数据
-                                        parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
-                                            var result;
-                                            console.log(this);
-                                            console.log(JSON.stringify(res));
-                                            if(this.page.curr){
-                                                result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
-                                            }
-                                            else{
-                                                result=res.data.slice(0,this.limit);
-                                            }
-                                            return {
-                                                "code": res.code, //解析接口状态
-                                                "msg": res.msg, //解析提示文本
-                                                "count": res.count, //解析数据长度
-                                                "data": result //解析数据列表
-                                            };
-                                        },
-                                        //设置表格工具栏
-                                        toolbar: "#toolbar"
-                                    });
-                                })
+                                selectApply();
                                    break;
                             case "delete":
                                     var arr=checkStatus.data;

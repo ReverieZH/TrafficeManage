@@ -67,6 +67,45 @@ public class ApplyExemptedCheckController {
         }
         return layUI;
     }
+
+    @RequestMapping("/search.do")
+    @ResponseBody
+    public LayUI search(HttpServletRequest request,  @RequestParam String acNumber){
+        LayUI<Applyexemptedcheck> layUI=new LayUI();
+        List<Applyexemptedcheck> applyexemptedchecks = applyExemptedCheckService.searchByAcNumber(acNumber);
+        if(applyexemptedchecks!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(applyexemptedchecks.size());
+            layUI.setData(applyexemptedchecks);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/serachByUser.do")
+    @ResponseBody
+    public LayUI serachByName(HttpServletRequest request,  @RequestParam String username){
+        LayUI<Applyexemptedcheck> layUI=new LayUI();
+        List<Applyexemptedcheck> applyexemptedchecks = applyExemptedCheckService.searchByUser(username);
+        if(applyexemptedchecks!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(applyexemptedchecks.size());
+            layUI.setData(applyexemptedchecks);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
     @RequestMapping("/getinfo.do")
     public String getinfo(HttpServletRequest request,String acNumber){
         Applyexemptedcheck applyexemptedcheck = applyExemptedCheckService.selectoneById(acNumber);

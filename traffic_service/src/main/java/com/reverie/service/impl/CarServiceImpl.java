@@ -25,6 +25,18 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    public List<Car> searchByPlateNumber(String plateNumberStr) {
+        String plateNumber="%"+plateNumberStr+"%";
+        return carMapper.searchByPlateNumber(plateNumber);
+    }
+
+    @Override
+    public List<Car> searchByName(String nameStr) {
+        String name="%"+nameStr+"%";
+        return carMapper.searchByName(name);
+    }
+
+    @Override
     public int delete(String platenumber) {
         return carMapper.deleteByPrimaryKey(platenumber);
     }

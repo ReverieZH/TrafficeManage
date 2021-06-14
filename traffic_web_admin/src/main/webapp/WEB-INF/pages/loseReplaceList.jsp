@@ -265,6 +265,81 @@
                 }
             }
         }
+
+        function search(url) {
+            layui.use("table", function () {
+                    var table = layui.table;
+                    table.render({
+                        elem: "#plateNumber_table",                 //容器id
+                        url:url,  //数据接口
+                        cols:[[
+                            {field:'num',type:"numbers"},
+                            {field:'check',type:"checkbox"},
+                            {field:'loseReplaceNumber',title:'申请编号',sort:true,width:120},
+                            {field:'dlNumber',title:'驾驶证编号',sort:true,width:120},
+                            {field:'accessMethod',title:'获取方式',sort:true,width:100,templet:function(d){
+                                    if(d.accessMethod=='0')
+                                        return "<span  style='color:green'>委托邮政寄递</span>";
+                                    else if(d.accessMethod=='1')
+                                        return "前往窗口自取";
+                                }},
+                            {field:'address',title:'住址',width:100},
+                            {field:'area',title:'地区',width:100},
+                            {field:'receiverName',title:'收件人姓名',width:100},
+                            {field:'phoneNumber',title:'手机号码',width:100},
+                            {field:'postCode',title:'邮政编码',width:100},
+                            {field:'applyDate',title:'申请日期',width:100},
+                            {field:'username',title:'用户名',width:100},
+                            {field:'status',title:'状态',sort:true,width:100,templet:function(d){
+                                    if(d.status=='1')
+                                        return "给予受理";
+                                    else if(d.status=='0')
+                                        return "<span  style='color:red'>不予受理</span>";
+                                    else if(d.status=='2')
+                                        return "<span  style='color:green'>申请中</span>";
+                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                            {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
+                        ]],
+                        page: true,    //开启分页
+                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                        limit: 10,  //一页显示10条数据
+                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                            var result;
+                            console.log(this);
+                            console.log(JSON.stringify(res));
+                            if (this.page.curr) {
+                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                            } else {
+                                result = res.data.slice(0, this.limit);
+                            }
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.count, //解析数据长度
+                                "data": result //解析数据列表
+                            };
+                        },
+                        //设置表格工具栏
+                        toolbar: "#toolbar"
+                    });
+                }
+            )
+        }
+
+        function searchByLoseReplaceNumber() {
+            var searchByLoseReplaceNumber=document.getElementById("searchByLoseReplaceNumber").value;
+            search("/change/loseSerach.do?loseReplaceNumber="+searchByLoseReplaceNumber);
+        }
+        function searchByUser() {
+            var searchByUser=document.getElementById("searchByUser").value;
+            search("/change/loseSerachByUser.do?username="+searchByUser);
+        }
+        function  findAll() {
+            search("/change/losedatamain.do");
+        }
+        function selectApply() {
+            search("/change/loseApplying.do")
+        }
     </script>
 
 </head>
@@ -274,10 +349,17 @@
     <table id="plateNumber_table"  lay-filter="headtoolbar"></table>
 
     <script type="text/html" id="toolbar">
-        <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="selectApplying">查看未受理</button>
-            <button class="layui-btn layui-btn-sm" lay-event="selectAll">查看所有</button>
-<%--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--%>
+        <div>
+            <div class="layui-btn-container" style="float: left">
+                <button class="layui-btn layui-btn-sm" lay-event="selectAll">所有数据</button>
+                <button class="layui-btn layui-btn-sm" lay-event="selectApplying">申请中</button>
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByLoseReplaceNumber" name="searchByLoseReplaceNumber" placeholder="输入申请编号查找"  class="layui-input" onchange="searchByLoseReplaceNumber()" style="width: 150px;height: 30px" >
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByUser" name="searchByUser" placeholder="输入用户名查找"  class="layui-input" onchange="searchByUser()" style="width: 150px;height: 30px" >
+            </div>
         </div>
     </script>
 
@@ -352,150 +434,10 @@
                         var eventName=obj.event;
                         switch (eventName) {
                             case "selectApplying":
-                                layui.use("table",function () {
-                                    var table = layui.table;
-
-                                    table.render({
-                                        elem: "#plateNumber_table",                 //容器id
-                                        url: "/change/loseApplying.do",  //数据接口
-                                        cols: [[
-                                            {field: 'num', type: "numbers"},
-                                            {field: 'check', type: "checkbox"},
-                                            {field:'loseReplaceNumber',title:'申请编号',sort:true,width:120},
-                                            {field: 'dlNumber', title: '驾驶证编号', sort: true, width: 120},
-                                            {
-                                                field: 'accessMethod',
-                                                title: '获取方式',
-                                                sort: true,
-                                                width: 100,
-                                                templet: function (d) {
-                                                    if (d.accessMethod == '0')
-                                                        return "<span  style='color:green'>委托邮政寄递</span>";
-                                                    else if (d.accessMethod == '1')
-                                                        return "前往窗口自取";
-                                                }
-                                            },
-                                            {field: 'address', title: '住址', width: 100},
-                                            {field: 'area', title: '地区', width: 100},
-                                            {field: 'receiverName', title: '收件人姓名', width: 100},
-                                            {field: 'phoneNumber', title: '手机号码', width: 100},
-                                            {field: 'postCode', title: '邮政编码', width: 100},
-                                            {field: 'applyDate', title: '申请日期', width: 100},
-                                            {field: 'username', title: '用户名', width: 100},
-                                            {
-                                                field: 'status',
-                                                title: '状态',
-                                                sort: true,
-                                                width: 100,
-                                                templet: function (d) {
-                                                    if (d.status == '1')
-                                                        return "给予受理";
-                                                    else if (d.status == '0')
-                                                        return "<span  style='color:red'>不予受理</span>";
-                                                    else if (d.status == '2')
-                                                        return "<span  style='color:green'>申请中</span>";
-                                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/
-                                                }
-                                            },
-                                            {field: "操作", toolbar: "#bar", fixed: "right", width: 300}           //设置表头工具栏
-                                        ]],
-                                        page: true,    //开启分页
-                                        limits: [3,5,10],  //一页选择显示3,5或10条数据
-                                        limit: 10,  //一页显示10条数据
-                                        parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
-                                            var result;
-                                            console.log(this);
-                                            console.log(JSON.stringify(res));
-                                            if(this.page.curr){
-                                                result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
-                                            }
-                                            else{
-                                                result=res.data.slice(0,this.limit);
-                                            }
-                                            return {
-                                                "code": res.code, //解析接口状态
-                                                "msg": res.msg, //解析提示文本
-                                                "count": res.count, //解析数据长度
-                                                "data": result //解析数据列表
-                                            };
-                                        },
-                                        //设置表格工具栏
-                                        toolbar: "#toolbar"
-                                    });
-                                })
+                               selectApply();
                                 break;
                             case "selectAll":
-                                layui.use("table",function () {
-                                    var table = layui.table;
-
-                                    table.render({
-                                        elem: "#plateNumber_table",                 //容器id
-                                        url: "/change/losedatamain.do",  //数据接口
-                                        cols: [[
-                                            {field: 'num', type: "numbers"},
-                                            {field: 'check', type: "checkbox"},
-                                            {field:'loseReplaceNumber',title:'申请编号',sort:true,width:120},
-                                            {field: 'dlNumber', title: '驾驶证编号', sort: true, width: 120},
-                                            {
-                                                field: 'accessMethod',
-                                                title: '获取方式',
-                                                sort: true,
-                                                width: 100,
-                                                templet: function (d) {
-                                                    if (d.accessMethod == '0')
-                                                        return "<span  style='color:green'>委托邮政寄递</span>";
-                                                    else if (d.accessMethod == '1')
-                                                        return "前往窗口自取";
-                                                }
-                                            },
-                                            {field: 'address', title: '住址', width: 100},
-                                            {field: 'area', title: '地区', width: 100},
-                                            {field: 'receiverName', title: '收件人姓名', width: 100},
-                                            {field: 'phoneNumber', title: '手机号码', width: 100},
-                                            {field: 'postCode', title: '邮政编码', width: 100},
-                                            {field: 'applyDate', title: '申请日期', width: 100},
-                                            {field: 'username', title: '用户名', width: 100},
-                                            {
-                                                field: 'status',
-                                                title: '状态',
-                                                sort: true,
-                                                width: 100,
-                                                templet: function (d) {
-                                                    if (d.status == '1')
-                                                        return "受理成功";
-                                                    else if (d.status == '0')
-                                                        return "<span  style='color:red'>不予受理</span>";
-                                                    else if (d.status == '2')
-                                                        return "<span  style='color:green'>申请中</span>";
-                                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/
-                                                }
-                                            },
-                                            {field: "操作", toolbar: "#bar", fixed: "right", width: 300}           //设置表头工具栏
-                                        ]],
-                                        page: true,    //开启分页
-                                        limits: [3,5,10],  //一页选择显示3,5或10条数据
-                                        limit: 10,  //一页显示10条数据
-                                        parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
-                                            var result;
-                                            console.log(this);
-                                            console.log(JSON.stringify(res));
-                                            if(this.page.curr){
-                                                result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
-                                            }
-                                            else{
-                                                result=res.data.slice(0,this.limit);
-                                            }
-                                            return {
-                                                "code": res.code, //解析接口状态
-                                                "msg": res.msg, //解析提示文本
-                                                "count": res.count, //解析数据长度
-                                                "data": result //解析数据列表
-                                            };
-                                        },
-                                        //设置表格工具栏
-                                        toolbar: "#toolbar"
-                                    });
-                                })
+                               findAll();
                                 break;
                             case "delete":
                                     var arr=checkStatus.data;

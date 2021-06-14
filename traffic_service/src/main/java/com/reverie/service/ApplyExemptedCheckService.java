@@ -14,6 +14,10 @@ public interface ApplyExemptedCheckService {
 
     public List<Applyexemptedcheck> selectCondiion(String status);
 
+    public List<Applyexemptedcheck> searchByAcNumber(String acNumber);
+
+    public List<Applyexemptedcheck> searchByUser(String username);
+
     public List<Applyexemptedcheck> selectByUser(String username);
 
     public String save(Applyexemptedcheck applyexemptedcheck);

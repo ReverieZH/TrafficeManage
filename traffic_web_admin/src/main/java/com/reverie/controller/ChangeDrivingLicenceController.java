@@ -1,6 +1,7 @@
 package com.reverie.controller;
 
 
+import com.reverie.domain.Applyexemptedcheck;
 import com.reverie.domain.Checkreservation;
 import com.reverie.domain.LayUI;
 import com.reverie.domain.Losereplace;
@@ -51,6 +52,44 @@ public class ChangeDrivingLicenceController {
     public LayUI loseApplyingList(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
         LayUI<Losereplace> layUI=new LayUI();
         List<Losereplace> losereplaces = loseReplaceService.selectApplying();
+        if(losereplaces!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(losereplaces.size());
+            layUI.setData(losereplaces);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/loseSearch.do")
+    @ResponseBody
+    public LayUI search(HttpServletRequest request, @RequestParam String loseReplaceNumber,@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
+        LayUI<Losereplace> layUI=new LayUI();
+        List<Losereplace> losereplaces = loseReplaceService.searchByLoseReplaceNumber(loseReplaceNumber);
+        if(losereplaces!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(losereplaces.size());
+            layUI.setData(losereplaces);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/loseSerachByUser.do")
+    @ResponseBody
+    public LayUI serachByName(HttpServletRequest request,  @RequestParam String username,@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
+        LayUI<Losereplace> layUI=new LayUI();
+        List<Losereplace> losereplaces = loseReplaceService.searchByUser(username);
         if(losereplaces!=null){
             layUI.setCode("0");
             layUI.setMsg("成功");

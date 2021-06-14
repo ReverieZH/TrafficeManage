@@ -28,6 +28,12 @@ public class VehiclelicenseServiceImpl implements VehiclelicenseService {
     }
 
     @Override
+    public List<Vehiclelicense> searchByName(String nameStr) {
+        String name="%"+nameStr+"%";
+        return vechilelicenseMapper.searchByName(name);
+    }
+
+    @Override
     public int delete(String vlnumber) {
         return vechilelicenseMapper.deleteByPrimaryKey(vlnumber);
     }

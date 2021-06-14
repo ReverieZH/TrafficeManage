@@ -15,4 +15,8 @@ public interface LoseReplaceService {
     public Losereplace selectById(String loseReplaceNumber);
 
     public int handle(String loseReplaceNumber,String status);
+
+    List<Losereplace> searchByLoseReplaceNumber(String loseReplaceNumber);
+
+    List<Losereplace> searchByUser(String username);
 }

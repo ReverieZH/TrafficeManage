@@ -14,6 +14,10 @@ public interface PlateNumberApplyService {
 
     public List<Platenumberapply> selectByUsername(String username);
 
+    public List<Platenumberapply> searchByUser(String username);
+
+    public List<Platenumberapply> searchByApplyNumber(String applyNumber);
+
     public int delete(String applyNumber);
 
     public int deleteList(List<String> applyNumbers);

@@ -28,6 +28,12 @@ public class DriveLicenceServiceImpl implements DriveLicenceService {
     }
 
     @Override
+    public List<Drivinglicence> searchByName(String nameStr) {
+        String name="%"+nameStr+"%";
+        return drivinglicenceMapper.searchByName(name);
+    }
+
+    @Override
     public int delete(String dlnumber) {
         return drivinglicenceMapper.deleteByPrimaryKey(dlnumber);
     }

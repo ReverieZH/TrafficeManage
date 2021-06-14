@@ -20,26 +20,50 @@ import java.util.List;
 @Repository
 public interface ApplyExemptedCheckMapper extends Mapper<Applyexemptedcheck> {
 
-    @Select("<script>" +
-            "select * from applyexemptedcheck"+
-            "<where>"+
-            "<if test=\"status !=null\" > and status=#{status}</if>"+
-            "</where>"+
-            "</script>")
-    @Results({
-            @Result(id = true,column = "apply_number",property = "applyNumber"),
-            @Result(column = "car_type",property = "carType"),
-            @Result(column = "vehicle_proof",property = "vehicleProof"),
-            @Result(column = "certificate_number",property = "certificateNumber"),
-            @Result(column = "brand_model",property = "brandModel"),
-            @Result(column = "vin",property = "vin"),
-            @Result(column = "optional_plate_head",property = "optionalPlateHead"),
-            @Result(column = "phone_number",property = "phoneNumber"),
-            @Result(column = "username",property = "username"),
-            @Result(column = "status",property = "status"),
-    })
-    public List<Applyexemptedcheck> selectList(@Param("status") String status);
 
+    @Select("select * from applyexemptedcheck where acNumber like #{acNumber}" )
+    @Results({
+            @Result(id = true,column = "ac_number",property = "acNumber"),
+            @Result(column = "plate_number",property = "plateNumber"),
+            @Result(column = "vehicle_proof",property = "vehicleProof"),
+            @Result(column = "insurance_photo",property = "insurancePhoto"),
+            @Result(column = "tax_photo",property = "taxPhoto"),
+            @Result(column = "end_date",property = "endDate"),
+            @Result(column = "is_need_paper",property = "isNeedPaper"),
+            @Result(column = "access_method",property = "accessMethod"),
+            @Result(column = "receiver_name",property = "receiverName"),
+            @Result(column = "phone_number",property = "phoneNumber"),
+            @Result(column = "address",property = "address"),
+            @Result(column = "post_code",property = "postCode"),
+            @Result(column = "paystatus",property = "paystatus"),
+            @Result(column = "username",property = "username"),
+            @Result(column = "apply_date",property = "applyDate"),
+            @Result(column = "status",property = "status"),
+            @Result(column = "area",property = "area"),
+    })
+    public List<Applyexemptedcheck> searchByAcNumber(String acNumber);
+
+    @Select("select * from applyexemptedcheck where username like #{username}" )
+    @Results({
+            @Result(id = true,column = "ac_number",property = "acNumber"),
+            @Result(column = "plate_number",property = "plateNumber"),
+            @Result(column = "vehicle_proof",property = "vehicleProof"),
+            @Result(column = "insurance_photo",property = "insurancePhoto"),
+            @Result(column = "tax_photo",property = "taxPhoto"),
+            @Result(column = "end_date",property = "endDate"),
+            @Result(column = "is_need_paper",property = "isNeedPaper"),
+            @Result(column = "access_method",property = "accessMethod"),
+            @Result(column = "receiver_name",property = "receiverName"),
+            @Result(column = "phone_number",property = "phoneNumber"),
+            @Result(column = "address",property = "address"),
+            @Result(column = "post_code",property = "postCode"),
+            @Result(column = "paystatus",property = "paystatus"),
+            @Result(column = "username",property = "username"),
+            @Result(column = "apply_date",property = "applyDate"),
+            @Result(column = "status",property = "status"),
+            @Result(column = "area",property = "area"),
+    })
+    public List<Applyexemptedcheck> searchByUser(String username);
 
     @Select("select max(ac_number) from applyexemptedcheck where ac_number like #{date}")
     public String getMaxNumber(String date);

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -46,6 +47,47 @@ public class vehicleLicenseController {
         }
         return layUI;
     }
+
+    @RequestMapping("/search.do")
+    @ResponseBody
+    public LayUI search(HttpServletRequest request,  @RequestParam String vlnumber){
+        LayUI<Vehiclelicense> layUI=new LayUI();
+        List<Vehiclelicense> vehiclelicenses=new ArrayList<>();
+        Vehiclelicense vehiclelicense=vehiclelicenseService.selectByKey(vlnumber);
+        vehiclelicenses.add(vehiclelicense);
+        if(vehiclelicenses!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(vehiclelicenses.size());
+            layUI.setData(vehiclelicenses);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/serachByName.do")
+    @ResponseBody
+    public LayUI serachByName(HttpServletRequest request,  @RequestParam String name){
+        LayUI<Vehiclelicense> layUI=new LayUI();
+        List<Vehiclelicense> vehiclelicenses=vehiclelicenseService.searchByName(name);
+        if(vehiclelicenses!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(vehiclelicenses.size());
+            layUI.setData(vehiclelicenses);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
 
     @RequestMapping("/add.do")
     @ResponseBody
