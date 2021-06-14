@@ -325,11 +325,11 @@
 
         function searchByReserveNumber() {
             var searchByReserveNumber=document.getElementById("searchByReserveNumber").value;
-            search("/checkReverse/serach.do?reserveNumber="+searchByReserveNumber);
+            search("/checkReverse/search.do?reserveNumber="+searchByReserveNumber);
         }
         function searchByUser() {
             var searchByUser=document.getElementById("searchByUser").value;
-            search("/checkReverse/serachByUser.do?username="+searchByUser);
+            search("/checkReverse/searchByUser.do?username="+searchByUser);
         }
         function  findAll() {
             search("/checkReverse/datamain.do");

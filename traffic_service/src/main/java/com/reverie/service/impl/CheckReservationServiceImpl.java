@@ -71,9 +71,9 @@ public class CheckReservationServiceImpl implements CheckReservationService {
     }
 
     @Override
-    public List<Checkreservation> searchByReverseNumber(String applyNumberStr) {
-        String applyNumber="%"+applyNumberStr+"%";
-        return checkreservationMapper.searchByReverseNumber(applyNumber);
+    public List<Checkreservation> searchByReverseNumber(String ReverseNumberStr) {
+        String ReverseNumber="%"+ReverseNumberStr+"%";
+        return checkreservationMapper.searchByReverseNumber(ReverseNumber);
     }
 
     @Override

@@ -68,9 +68,9 @@ public class driveLicenceController {
         return layUI;
     }
 
-    @RequestMapping("/serachByName.do")
+    @RequestMapping("/searchByName.do")
     @ResponseBody
-    public LayUI serachByName(HttpServletRequest request,  @RequestParam String name){
+    public LayUI searchByName(HttpServletRequest request,  @RequestParam String name){
         LayUI<Drivinglicence> layUI=new LayUI();
         List<Drivinglicence> drivinglicences=driveLicenceService.searchByName(name);
         if(drivinglicences!=null){

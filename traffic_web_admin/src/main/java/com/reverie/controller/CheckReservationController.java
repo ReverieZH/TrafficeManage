@@ -85,9 +85,9 @@ public class CheckReservationController {
         return layUI;
     }
 
-    @RequestMapping("/serachByUser.do")
+    @RequestMapping("/searchByUser.do")
     @ResponseBody
-    public LayUI serachByUser(HttpServletRequest request,  @RequestParam String username){
+    public LayUI searchByUser(HttpServletRequest request,  @RequestParam String username){
         LayUI<Checkreservation> layUI=new LayUI();
         List<Checkreservation> checkreservations = checkReservationService.searchByUser(username);
         if(checkreservations!=null){

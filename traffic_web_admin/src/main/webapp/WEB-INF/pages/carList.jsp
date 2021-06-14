@@ -321,11 +321,11 @@
 
         function searchByPlatenumber() {
             var searchByPlatenumber=document.getElementById("searchByPlatenumber").value;
-            search("/car/serach.do?plateNumber="+searchByPlatenumber);
+            search("/car/search.do?plateNumber="+searchByPlatenumber);
         }
         function searchByName() {
             var searchByName=document.getElementById("searchByName").value;
-            search("/car/serachByName.do?name="+searchByName);
+            search("/car/searchByName.do?name="+searchByName);
         }
         function  findAll() {
             search("/car/datamain.do");

@@ -85,9 +85,9 @@ public class ChangeDrivingLicenceController {
         return layUI;
     }
 
-    @RequestMapping("/loseSerachByUser.do")
+    @RequestMapping("/loseSearchByUser.do")
     @ResponseBody
-    public LayUI serachByName(HttpServletRequest request,  @RequestParam String username,@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
+    public LayUI loseSearchByUser(HttpServletRequest request,  @RequestParam String username,@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "30")Integer limit){
         LayUI<Losereplace> layUI=new LayUI();
         List<Losereplace> losereplaces = loseReplaceService.searchByUser(username);
         if(losereplaces!=null){

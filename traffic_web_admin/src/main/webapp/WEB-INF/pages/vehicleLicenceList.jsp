@@ -323,11 +323,11 @@
 
         function searchByVlnumber() {
             var searchByVlnumber=document.getElementById("searchByVlnumber").value;
-            search("/vehiclelicense/serach.do?vlnumber="+searchByVlnumber);
+            search("/vehiclelicense/search.do?vlnumber="+searchByVlnumber);
         }
         function searchByName() {
             var searchByName=document.getElementById("searchByName").value;
-            search("/vehiclelicense/serachByName.do?name="+searchByName);
+            search("/vehiclelicense/searchByName.do?name="+searchByName);
         }
         function  findAll() {
             search("/vehiclelicense/datamain.do");

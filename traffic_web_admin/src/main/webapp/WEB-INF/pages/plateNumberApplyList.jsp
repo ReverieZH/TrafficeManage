@@ -325,11 +325,11 @@
 
         function searchByApplyNumber() {
             var searchByApplyNumber=document.getElementById("searchByApplyNumber").value;
-            search("/plateNumberApply/serach.do?applyNumber="+searchByApplyNumber);
+            search("/plateNumberApply/search.do?applyNumber="+searchByApplyNumber);
         }
         function searchByUser() {
             var searchByUser=document.getElementById("searchByUser").value;
-            search("/plateNumberApply/serachByUser.do?username="+searchByUser);
+            search("/plateNumberApply/searchByUser.do?username="+searchByUser);
         }
         function  findAll() {
             search("/plateNumberApply/datamain.do");

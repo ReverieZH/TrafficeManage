@@ -86,9 +86,9 @@ public class PlateNumberApplyController {
         return layUI;
     }
 
-    @RequestMapping("/serachByUser.do")
+    @RequestMapping("/searchByUser.do")
     @ResponseBody
-    public LayUI serachByUser(HttpServletRequest request,  @RequestParam String username){
+    public LayUI searchByUser(HttpServletRequest request,  @RequestParam String username){
         LayUI<Platenumberapply> layUI=new LayUI();
         List<Platenumberapply> platenumberapplies = plateNumberApplyService.searchByUser(username);
         if(platenumberapplies!=null){

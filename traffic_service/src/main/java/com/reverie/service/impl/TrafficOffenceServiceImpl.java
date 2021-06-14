@@ -107,4 +107,16 @@ public class TrafficOffenceServiceImpl implements TrafficOffenceService {
     public int update(Trafficoffence trafficoffence) {
         return trafficOffenceMapper.updateByPrimaryKeySelective(trafficoffence);
     }
+
+    @Override
+    public List<Trafficoffence> searchByPlate(String plateNumberStr) {
+        String plateNumber="%"+plateNumberStr+"%";
+        return trafficOffenceMapper.searchByPlate(plateNumber);
+    }
+
+    @Override
+    public List<Trafficoffence> searchById(String trafficOffenceNumberStr) {
+        String trafficOffenceNumber="%"+trafficOffenceNumberStr+"%";
+        return trafficOffenceMapper.searchById(trafficOffenceNumber);
+    }
 }

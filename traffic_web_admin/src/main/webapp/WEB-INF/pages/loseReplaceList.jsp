@@ -328,11 +328,11 @@
 
         function searchByLoseReplaceNumber() {
             var searchByLoseReplaceNumber=document.getElementById("searchByLoseReplaceNumber").value;
-            search("/change/loseSerach.do?loseReplaceNumber="+searchByLoseReplaceNumber);
+            search("/change/loseSearch.do?loseReplaceNumber="+searchByLoseReplaceNumber);
         }
         function searchByUser() {
             var searchByUser=document.getElementById("searchByUser").value;
-            search("/change/loseSerachByUser.do?username="+searchByUser);
+            search("/change/loseSearchByUser.do?username="+searchByUser);
         }
         function  findAll() {
             search("/change/losedatamain.do");

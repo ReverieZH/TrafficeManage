@@ -16,7 +16,7 @@ public interface VechilelicenseMapper extends Mapper<Vehiclelicense> {
     @Select("select max(vlnumber) from vehiclelicense where vlnumber like #{date}")
     public String getMaxNumber(String date);
 
-    @Select("select * from vehiclelicense where name like #{name}")
+    @Select("select * from vehiclelicense where owner like #{name}")
     @Results({
             @Result(column = "vlnumber",property = "vlnumber",id = true),
             @Result(column = "plate_number",property = "plateNumber"),

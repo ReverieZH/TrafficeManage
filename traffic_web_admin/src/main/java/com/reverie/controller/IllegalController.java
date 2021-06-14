@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.Action;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -51,6 +52,43 @@ public class IllegalController {
         return layUI;
     }
 
+    @RequestMapping("/search.do")
+    @ResponseBody
+    public LayUI search(HttpServletRequest request,  @RequestParam String trafficOffenceNumber){
+        LayUI<Trafficoffence> layUI=new LayUI();
+        List<Trafficoffence> trafficoffences=trafficOffenceService.searchById(trafficOffenceNumber);
+        if(trafficoffences!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(trafficoffences.size());
+            layUI.setData(trafficoffences);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
+
+    @RequestMapping("/searchByPlate.do")
+    @ResponseBody
+    public LayUI searchByPlate(HttpServletRequest request,  @RequestParam String plateNumber){
+        LayUI<Trafficoffence> layUI=new LayUI();
+        List<Trafficoffence> trafficoffences=trafficOffenceService.searchByPlate(plateNumber);
+        if(trafficoffences!=null){
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(trafficoffences.size());
+            layUI.setData(trafficoffences);
+        }else{
+            layUI.setCode("0");
+            layUI.setMsg("成功");
+            layUI.setCount(0);
+            layUI.setData(null);
+        }
+        return layUI;
+    }
 
     @RequestMapping("/getaddTrafficOffence.do")
     public String getaddDriveLicence(HttpServletRequest request){

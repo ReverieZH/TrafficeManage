@@ -71,6 +71,7 @@ public class ApplyExemptedCheckController {
     @RequestMapping("/search.do")
     @ResponseBody
     public LayUI search(HttpServletRequest request,  @RequestParam String acNumber){
+        System.out.println("================search=====================");
         LayUI<Applyexemptedcheck> layUI=new LayUI();
         List<Applyexemptedcheck> applyexemptedchecks = applyExemptedCheckService.searchByAcNumber(acNumber);
         if(applyexemptedchecks!=null){
@@ -87,9 +88,9 @@ public class ApplyExemptedCheckController {
         return layUI;
     }
 
-    @RequestMapping("/serachByUser.do")
+    @RequestMapping("/searchByUser.do")
     @ResponseBody
-    public LayUI serachByName(HttpServletRequest request,  @RequestParam String username){
+    public LayUI searchByUser(HttpServletRequest request,  @RequestParam String username){
         LayUI<Applyexemptedcheck> layUI=new LayUI();
         List<Applyexemptedcheck> applyexemptedchecks = applyExemptedCheckService.searchByUser(username);
         if(applyexemptedchecks!=null){

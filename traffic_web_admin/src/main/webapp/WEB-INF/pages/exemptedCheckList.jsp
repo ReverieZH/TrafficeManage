@@ -341,11 +341,11 @@
 
         function searchByAcNumber() {
             var searchByAcNumber=document.getElementById("searchByAcNumber").value;
-            search("/exemptCheck/serach.do?acNumber="+searchByAcNumber);
+            search("/exemptCheck/search.do?acNumber="+searchByAcNumber);
         }
         function searchByUser() {
             var searchByUser=document.getElementById("searchByUser").value;
-            search("/exemptCheck/serachByUser.do?username="+searchByUser);
+            search("/exemptCheck/searchByUser.do?username="+searchByUser);
         }
         function  findAll() {
             search("/exemptCheck/datamain.do");

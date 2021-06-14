@@ -72,9 +72,9 @@ public class CarController {
         return layUI;
     }
 
-    @RequestMapping("/serachByName.do")
+    @RequestMapping("/searchByName.do")
     @ResponseBody
-    public LayUI serachByName(HttpServletRequest request,  @RequestParam String name){
+    public LayUI searchByName(HttpServletRequest request,  @RequestParam String name){
         LayUI<Car> layUI=new LayUI();
         List<Car> cars = carService.searchByName(name);
         if(cars!=null){

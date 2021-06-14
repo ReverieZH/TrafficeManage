@@ -266,6 +266,84 @@
                 }
             }
         }
+
+        function search(url) {
+            layui.use("table", function () {
+                    var table = layui.table;
+                    table.render({
+                        elem: "#plateNumber_table",                 //容器id
+                        url:url,  //数据接口
+                        cols:[[
+                            {field:'num',type:"numbers"},
+                            {field:'check',type:"checkbox"},
+                            {field:'trafficOffenceNumber',title:'违法编号',sort:true,width:120},
+                            {field:'trafficOffenceDate',title:'违法时间',width:100},
+                            {field:'trafficOffencePlace',title:'违法地点',width:100},
+                            {field:'trafficOffenceAct',title:'违法行为',width:100},
+                            {field:'score',title:'记分值',width:100},
+                            {field:'money',title:'罚金金额',width:100},
+                            {field:'payDate',title:'缴纳罚款日期',width:100},
+                            {field:'dlNumber',title:'驾驶证号',width:100},
+                            {field:'plateNumber',title:'车牌号码',width:100},
+                            {field:'punishOffice',title:'处罚机关',width:100},
+                            {field:'needWindow',title:'是否需要窗口办理',width:100,templet:function (d) {
+                                    if(d.needWindow=='0'){
+                                        return "不需要窗口办理"
+                                    }else if(d.needWindow=='1'){
+                                        return "<span  style='color:red'>需要窗口办理</span>";
+                                    }
+                                }},
+                            {field:'status',title:'状态',sort:true,width:100,templet:function(d){
+                                    if(d.status=='1')
+                                        return "<span  style='color:green'>接受处罚</span>";
+                                    else if(d.status=='0')
+                                        return "<span  style='color:red'>不接受处罚</span>";
+                                    else if(d.status=='2')
+                                        return "未处理";
+                                    /*return  d.status == '1' ? "正常使用":"<span  style='color:red'>限制使用</span>"*/}},
+                            {field:"操作",toolbar:"#bar",fixed:"right",width:300}           //设置表头工具栏
+                        ]],
+                        page: true,    //开启分页
+                        limits: [3, 5, 10],  //一页选择显示3,5或10条数据
+                        limit: 10,  //一页显示10条数据
+                        parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                            var result;
+                            console.log(this);
+                            console.log(JSON.stringify(res));
+                            if (this.page.curr) {
+                                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                            } else {
+                                result = res.data.slice(0, this.limit);
+                            }
+                            return {
+                                "code": res.code, //解析接口状态
+                                "msg": res.msg, //解析提示文本
+                                "count": res.count, //解析数据长度
+                                "data": result //解析数据列表
+                            };
+                        },
+                        //设置表格工具栏
+                        toolbar: "#toolbar"
+                    });
+                }
+            )
+        }
+
+        function searchByTrafficOffenceNumber() {
+            var searchByTrafficOffenceNumber=document.getElementById("searchByTrafficOffenceNumber").value;
+            search("/illegal/search.do?trafficOffenceNumber="+searchByTrafficOffenceNumber);
+        }
+        function searchByPlate() {
+            var searchByPlate=document.getElementById("searchByPlate").value;
+            search("/illegal/searchByPlate.do?plateNumber="+searchByPlate);
+        }
+        function  findAll() {
+            search("/illegal/datamain.do");
+        }
+        function selectApply() {
+            search("/illegal/selectdatamain.do?status=2")
+        }
+
     </script>
 
 </head>
@@ -276,8 +354,21 @@
 
     <script type="text/html" id="toolbar">
         <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+
 <%--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--%>
+        </div>
+
+        <div>
+            <div class="layui-btn-container" style="float: left">
+                <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+                <button class="layui-btn layui-btn-sm" lay-event="datamain">所有数据</button>
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByTrafficOffenceNumber" name="searchByTrafficOffenceNumber" placeholder="输入违法编号查找"  class="layui-input" onchange="searchByTrafficOffenceNumber()" style="width: 150px;height: 30px" >
+            </div>
+            <div style="float: left">
+                <input type="text" id="searchByPlate" name="searchByPlate" placeholder="输入车牌号查找"  class="layui-input" onchange="searchByPlate()" style="width: 150px;height: 30px" >
+            </div>
         </div>
     </script>
 
@@ -357,6 +448,9 @@
                         switch (eventName) {
                             case "add":
                                   getiframe('/illegal/getaddTrafficOffence.do');
+                                  break;
+                            case "datamain":
+                                  findAll();
                                   break;
                             case "delete":
                                     var arr=checkStatus.data;

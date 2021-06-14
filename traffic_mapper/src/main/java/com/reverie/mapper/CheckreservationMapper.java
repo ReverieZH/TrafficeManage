@@ -18,7 +18,7 @@ public interface CheckreservationMapper extends Mapper<Checkreservation> {
     @Select("select max(reserve_number) from checkreservation where reserve_number like #{date}")
     public String getMaxNumber(String date);
 
-    @Select("select * from checkreservation where username like #{username}" )
+    @Select("select * from checkreservation where reserve_number like #{reserveNumber}" )
     @Results({
             @Result(id = true,column = "reserve_number",property = "reserveNumber"),
             @Result(column = "plate_number",property = "plateNumber"),
@@ -34,7 +34,7 @@ public interface CheckreservationMapper extends Mapper<Checkreservation> {
             @Result(column = "reserve_date",property = "reserveDate"),
             @Result(column = "status",property = "status"),
     })
-    List<Checkreservation> searchByReverseNumber(String applyNumber);
+    List<Checkreservation> searchByReverseNumber(String reserveNumber);
 
     @Select("select * from checkreservation where username like #{username}" )
     @Results({

@@ -18,4 +18,8 @@ public interface TrafficOffenceService {
 
     public int update(Trafficoffence trafficoffence);
 
+    List<Trafficoffence> searchByPlate(String plateNumber);
+
+    List<Trafficoffence> searchById(String trafficOffenceNumber);
+
 }

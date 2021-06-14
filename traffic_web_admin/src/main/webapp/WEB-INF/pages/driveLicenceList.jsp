@@ -326,11 +326,11 @@
 
         function searchByDlnumber() {
             var searchByDlnumber=document.getElementById("searchByDlnumber").value;
-            search("/driveLicence/serach.do?dlnumber="+searchByDlnumber);
+            search("/driveLicence/search.do?dlnumber="+searchByDlnumber);
         }
         function searchByName() {
             var searchByName=document.getElementById("searchByName").value;
-            search("/driveLicence/serachByName.do?name="+searchByName);
+            search("/driveLicence/searchByName.do?name="+searchByName);
         }
         function  findAll() {
             search("/driveLicence/datamain.do");
